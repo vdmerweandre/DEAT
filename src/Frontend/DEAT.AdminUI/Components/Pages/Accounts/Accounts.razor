@@ -1,0 +1,78 @@
+﻿@page "/accounts"
+
+@rendermode InteractiveServer
+
+<!-- Transactions.razor -->
+@inject DEAT.AdminUI.Services.Contracts.IAccountService AccountService
+
+
+<PageTitle>COA</PageTitle>
+
+<h1>Chart of Accounts</h1>
+
+
+@code {
+    private IEnumerable<AccountDto> AccountList = new List<AccountDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AccountList = await AccountService.GetAllAccountsAsync();
+    }
+
+    private HashSet<string> CollapsedCategories { get; set; } = new HashSet<string>();
+
+    private void ToggleCategory(string category)
+    {
+        if (CollapsedCategories.Contains(category))
+        {
+            CollapsedCategories.Remove(category);
+        }
+        else
+        {
+            CollapsedCategories.Add(category);
+        }
+
+        StateHasChanged(); // Notify Blazor of UI changes
+    }
+}
+
+<h3>Account Balances</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Account ID</th>
+            <th>Account Name</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var categoryGroup in AccountList.GroupBy(a => a.Category))
+        {
+            <tr>
+                <td colspan="6" class="fw-bold">
+                    <button class="btn btn-link p-0 d-flex align-items-center" @onclick="() => ToggleCategory(categoryGroup.Key)">
+                        <i class="bi @(CollapsedCategories.Contains(categoryGroup.Key) ? "bi-chevron-right" : "bi-chevron-down") me-2"></i>
+                        @categoryGroup.Key
+                    </button>
+                </td>
+            </tr>
+            @if (!CollapsedCategories.Contains(categoryGroup.Key))
+            {
+                foreach (var account in categoryGroup)
+                {
+                    <tr>
+                        <td></td> <!-- Empty cell to align under the category -->
+                        <td>@account.AccountId</td>
+                        <td>@account.AccountName</td>
+                        <td>@account.Debit</td>
+                        <td>@account.Credit</td>
+                        <td>@account.Balance</td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>

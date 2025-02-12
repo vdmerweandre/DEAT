@@ -1,0 +1,59 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">DEAT.AdminUI</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="transactions">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Transactions
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3 ms-3">
+            <NavLink class="nav-link" href="create-transaction">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Create Transaction
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="accounts">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> COA
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3 ms-3">
+            <NavLink class="nav-link" href="create-account">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Create Accounts
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="state-changes">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> State Changes
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="event-logs">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Event Logs
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            </NavLink>
+        </div>
+    </nav>
+</div>
+

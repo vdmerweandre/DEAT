@@ -1,0 +1,125 @@
+﻿@page "/create-transaction"
+@rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
+@inject DEAT.AdminUI.Services.Contracts.IAccountService AccountService
+@inject DEAT.AdminUI.Services.Contracts.ITransactionService TransactionService
+
+<PageTitle>Create Transaction</PageTitle>
+
+@code {
+
+    private TransactionDto NewTransaction = new();
+    private IEnumerable<AccountDto> Accounts = new List<AccountDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Accounts = await AccountService.GetAllAccountsAsync();
+    }
+
+    private async Task SubmitTransaction()
+    {
+        var transactionId = await TransactionService.CreateTransactionAsync(NewTransaction);
+
+        NewTransaction = new();
+    }
+
+    private void AddTransactionLeg()
+    {
+        var newLegs = NewTransaction.TransactionLegs.ToList();
+        newLegs.Add(new TransactionLegDto
+            {
+                TransactionLegId = Guid.NewGuid(),
+                CreditAccountId = Guid.Empty,
+                Amount = 0,
+                State = string.Empty
+            });
+        NewTransaction.TransactionLegs = newLegs.ToArray();
+    }
+
+    private void RemoveTransactionLeg(TransactionLegDto leg)
+    {
+        var updatedLegs = NewTransaction.TransactionLegs.ToList();
+        updatedLegs.Remove(leg);
+        NewTransaction.TransactionLegs = updatedLegs.ToArray();
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
+
+<h3>Create New Transaction</h3>
+
+    <div class="mb-3">
+        <label class="form-label">Debit Account</label>
+        <select class="form-select" @bind="NewTransaction.DebitAccountId">
+            <option value="">-- Select Debit Account --</option>
+            @foreach (var categoryGroup in Accounts.GroupBy(a => a.Category))
+            {
+                <optgroup label="@categoryGroup.Key">
+                    @foreach (var account in categoryGroup)
+                    {
+                        <option value="@account.AccountId">@account.AccountName (@account.Balance)</option>
+                    }
+                </optgroup>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="TransactionAmount" class="form-label">Transaction Amount</label>
+        <input type="number" id="TransactionAmount" step="0.01" class="form-control" @bind="NewTransaction.Amount" />
+    </div>
+
+    <h4>Transaction Legs</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Credit Account</th>
+                <th>Amount</th>
+                <th>State</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var leg in NewTransaction.TransactionLegs)
+            {
+                <tr>
+                    <td>
+                        <select class="form-select" @bind="leg.CreditAccountId">
+                            @foreach (var categoryGroup in Accounts.GroupBy(a => a.Category))
+                            {
+                                <optgroup label="@categoryGroup.Key">
+                                    @foreach (var account in categoryGroup)
+                                    {
+                                        <option value="@account.AccountId">@account.AccountName (@account.Balance)</option>
+                                    }
+                                </optgroup>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" @bind="leg.Amount" />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" @bind="leg.State" />
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="(() => RemoveTransactionLeg(leg))">Remove</button>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="4">
+                    <button class="btn btn-primary w-100" @onclick="AddTransactionLeg">Add Transaction Leg</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-success" @onclick="SubmitTransaction">Submit</button>
+        <button class="btn btn-secondary ms-2" @onclick="Cancel">Cancel</button>
+    </div>

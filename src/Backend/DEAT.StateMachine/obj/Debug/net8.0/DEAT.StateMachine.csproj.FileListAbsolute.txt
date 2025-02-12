@@ -1,0 +1,17 @@
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\DEAT.StateMachine.csproj.AssemblyReference.cache
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\DEAT.StateMachine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\DEAT.StateMachine.AssemblyInfoInputs.cache
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\DEAT.StateMachine.AssemblyInfo.cs
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\DEAT.StateMachine.csproj.CoreCompileInputs.cache
+C:\Projects\deat\src\Backend\DEAT.StateMachine\bin\Debug\net8.0\DEAT.StateMachine.deps.json
+C:\Projects\deat\src\Backend\DEAT.StateMachine\bin\Debug\net8.0\DEAT.StateMachine.dll
+C:\Projects\deat\src\Backend\DEAT.StateMachine\bin\Debug\net8.0\DEAT.StateMachine.pdb
+C:\Projects\deat\src\Backend\DEAT.StateMachine\bin\Debug\net8.0\DEAT.Data.Models.dll
+C:\Projects\deat\src\Backend\DEAT.StateMachine\bin\Debug\net8.0\DEAT.WebAPI.Services.dll
+C:\Projects\deat\src\Backend\DEAT.StateMachine\bin\Debug\net8.0\DEAT.WebAPI.Services.pdb
+C:\Projects\deat\src\Backend\DEAT.StateMachine\bin\Debug\net8.0\DEAT.Data.Models.pdb
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\DEAT.Sta.19FD90A5.Up2Date
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\DEAT.StateMachine.dll
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\refint\DEAT.StateMachine.dll
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\DEAT.StateMachine.pdb
+C:\Projects\deat\src\Backend\DEAT.StateMachine\obj\Debug\net8.0\ref\DEAT.StateMachine.dll

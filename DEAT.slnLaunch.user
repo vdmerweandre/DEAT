@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "src\\Backend\\DEAT.WebAPI\\DEAT.WebAPI.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\Frontend\\DEAT.AdminUI\\DEAT.AdminUI.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

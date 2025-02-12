@@ -1,0 +1,79 @@
+﻿@page "/event-logs"
+
+@rendermode InteractiveServer
+
+@using System.Collections.Concurrent
+
+@inject DEAT.AdminUI.Services.Contracts.IAuditService AuditService
+
+<PageTitle>Event Logs</PageTitle>
+
+<h1>MassTransit Event Logs</h1>
+
+@if (Events == null)
+{
+    <p>Loading event logs ...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Saga ID</th>
+                <th>EventName</th>
+                <th>Status</th>
+                <th>ExceptionMessage</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var categoryGroup in Events.GroupBy(a => a.SagaId)) 
+            {
+                <tr>
+                    <td colspan="6" class="fw-bold">
+                        <button class="btn btn-link p-0 d-flex align-items-center" @onclick="() => ToggleEventsExpand(categoryGroup.Key)">
+                            <i class="bi @(CollapsedEvents.Contains(categoryGroup.Key) ? "bi-chevron-right" : "bi-chevron-down") me-2"></i>
+                            @categoryGroup.Key
+                        </button>
+                    </td>
+                </tr>
+                @if (!CollapsedEvents.Contains(categoryGroup.Key))
+                {
+                    foreach (var account in categoryGroup)
+                    {
+                        <tr>
+                            <td></td> <!-- Empty cell to align under the category -->
+                            <td>@account.EventName</td>
+                            <td>@account.Status</td>
+                            <td>@account.ExceptionMessage</td>
+                            <td>@account.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff")</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<EventLog>? Events;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Events = await AuditService.GetEventLogsAsync();
+    }
+
+    private HashSet<Guid> CollapsedEvents { get; set; } = new HashSet<Guid>();
+
+    private void ToggleEventsExpand(Guid transactionId)
+    {
+        if (CollapsedEvents.Contains(transactionId))
+        {
+            CollapsedEvents.Remove(transactionId);
+        }
+        else
+        {
+            CollapsedEvents.Add(transactionId);
+        }
+    }
+}

@@ -1,0 +1,163 @@
+﻿@page "/transactions"
+
+@rendermode InteractiveServer
+
+<!-- Transactions.razor -->
+@inject DEAT.AdminUI.Services.Contracts.ITransactionService TransactionService
+@inject DEAT.AdminUI.Services.Contracts.IAccountService AccountService
+
+<PageTitle>Transactions</PageTitle>
+
+<h1>Transactions</h1>
+
+
+@code {
+    private IEnumerable<TransactionDto> TransactionList = new List<TransactionDto>();
+    private IEnumerable<AccountDto> Accounts = new List<AccountDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Accounts = await AccountService.GetAllAccountsAsync();
+        TransactionList = await TransactionService.GetAllTransactionsAsync();
+    }
+
+    private string GetAccountName(Guid accountId)
+    {
+        var account = Accounts.FirstOrDefault(a => a.AccountId == accountId);
+        return account?.AccountName ?? "Unknown Account";
+    }
+
+    private HashSet<Guid> CollapsedTransactions { get; set; } = new HashSet<Guid>();
+
+    private void ToggleTransactionExpand(Guid transactionId)
+    {
+        if (CollapsedTransactions.Contains(transactionId))
+        {
+            CollapsedTransactions.Remove(transactionId);
+        }
+        else
+        {
+            CollapsedTransactions.Add(transactionId);
+        }
+    }
+
+    private async Task ApproveTransaction(Guid transactionId)
+    {
+        // TODO: Add logic to approve the transaction
+        await TransactionService.ApproveTransactionAsync(transactionId);
+        await RefreshTransactionList();
+    }
+
+    private async Task CancelTransaction(Guid transactionId)
+    {
+        // TODO: Add logic to approve the transaction
+        await TransactionService.CancelTransactionAsync(transactionId);
+        await RefreshTransactionList();
+    }
+
+    private async Task RetryTransaction(Guid transactionId)
+    {
+        // TODO: Add logic to approve the transaction
+        await TransactionService.RetryTransactionAsync(transactionId);
+        await RefreshTransactionList();
+    }
+
+    private async Task ConfirmTransactionLeg(Guid transactionId, Guid transactionLegId)
+    {
+        // TODO: Add logic to confirm the transaction leg
+        await TransactionService.ConfirmTransactionLegAsync(transactionId, transactionLegId);
+        await RefreshTransactionList();
+    }
+
+    private async Task RefreshTransactionList()
+    {
+        await Task.Delay(500);
+        // Reload transactions or update status
+        TransactionList = await TransactionService.GetAllTransactionsAsync();
+        StateHasChanged();
+    }
+}
+
+<h3>Transactions</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Debit Account</th>
+            <th>Total Amount</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in TransactionList)
+        {
+            <tr>
+                <td>
+                    <button class="btn btn-link p-0 d-flex align-items-center" @onclick="() => ToggleTransactionExpand(transaction.TransactionId)">
+                        <i class="bi @(CollapsedTransactions.Contains(transaction.TransactionId) ? "bi-chevron-right" : "bi-chevron-down") me-2"></i>
+                        @transaction.TransactionId
+                    </button>
+                </td>
+                <td>@GetAccountName(transaction.DebitAccountId)</td>
+                <td>@transaction.Amount</td>
+                <td>@transaction.Status</td>
+                <td>
+                    <button class="btn btn-primary btn-sm"
+                        @onclick="() => ApproveTransaction(transaction.TransactionId)" 
+                            disabled="@(transaction.Status != "Created")">
+                        Approve
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-warning btn-sm"
+                            @onclick="() => RetryTransaction(transaction.TransactionId)"
+                            disabled="@(transaction.Status != "Failed")">
+                        Retry
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm"
+                        @onclick="() => CancelTransaction(transaction.TransactionId)"
+                            disabled="@(transaction.Status != "Created")">
+                        Cancel
+                    </button>
+                </td>
+            </tr>
+            @if (!CollapsedTransactions.Contains(transaction.TransactionId))
+            {
+                <tr>
+                    <td colspan="4">
+                        <table class="table table-bordered mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Transaction Leg ID</th>
+                                    <th>Credit Account</th>
+                                    <th>Amount</th>
+                                    <th>State</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var leg in transaction.TransactionLegs)
+                                {
+                                    <tr>
+                                        <td>@leg.TransactionLegId</td>
+                                        <td>@GetAccountName(@leg.CreditAccountId)</td>
+                                        <td>@leg.Amount</td>
+                                        <td>@leg.State</td>
+                                        <td>
+                                            <button class="btn btn-success btn-sm" 
+                                            @onclick="() => ConfirmTransactionLeg(transaction.TransactionId, leg.TransactionLegId)"
+                                                    disabled=" @(transaction.Status !="Processed" )">
+                                                Confirm
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

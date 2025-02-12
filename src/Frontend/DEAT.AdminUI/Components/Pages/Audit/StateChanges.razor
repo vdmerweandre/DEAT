@@ -1,0 +1,77 @@
+﻿@page "/state-changes"
+
+@rendermode InteractiveServer
+
+@inject DEAT.AdminUI.Services.Contracts.IAuditService AuditService
+
+<PageTitle>State Changes</PageTitle>
+
+<h1>MassTransit State Changes</h1>
+
+@if (StateChangeLogs == null)
+{
+    <p>Loading state changes...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Correlation ID</th>
+                <th>Previous State</th>
+                <th>Current State</th>
+                <th>Version</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var categoryGroup in StateChangeLogs.GroupBy(a => a.CorrelationId))
+            {
+                <tr>
+                    <td colspan="6" class="fw-bold">
+                        <button class="btn btn-link p-0 d-flex align-items-center" @onclick="() => ToggleStateChangesExpand(categoryGroup.Key)">
+                            <i class="bi @(CollapsedStateChanges.Contains(categoryGroup.Key) ? "bi-chevron-right" : "bi-chevron-down") me-2"></i>
+                            @categoryGroup.Key
+                        </button>
+                    </td>
+                </tr>
+                @if (!CollapsedStateChanges.Contains(categoryGroup.Key))
+                {
+                    foreach (var log in categoryGroup)
+                    {
+                    <tr>
+                        <td></td> <!-- Empty cell to align under the category -->
+                        <td>@log.PreviousState</td>
+                        <td>@log.CurrentState</td>
+                        <td>@log.Version</td>
+                        <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff")</td>
+                    </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<StateChangeLog>? StateChangeLogs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        StateChangeLogs = await AuditService.GetStateChangesAsync();
+    }
+
+    private HashSet<Guid> CollapsedStateChanges { get; set; } = new HashSet<Guid>();
+
+    private void ToggleStateChangesExpand(Guid transactionId)
+    {
+        if (CollapsedStateChanges.Contains(transactionId))
+        {
+            CollapsedStateChanges.Remove(transactionId);
+        }
+        else
+        {
+            CollapsedStateChanges.Add(transactionId);
+        }
+    }
+}

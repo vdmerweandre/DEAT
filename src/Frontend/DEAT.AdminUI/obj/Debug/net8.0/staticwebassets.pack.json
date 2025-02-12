@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Projects\\deat\\src\\Frontend\\DEAT.AdminUI\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\DEAT.AdminUI.bundle.scp.css",
+      "PackagePath": "staticwebassets\\DEAT.AdminUI.3om1e4kybw.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Projects\\deat\\src\\Frontend\\DEAT.AdminUI\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Projects\\deat\\src\\Frontend\\DEAT.AdminUI\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\deat\\src\\Frontend\\DEAT.AdminUI\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\deat\\src\\Frontend\\DEAT.AdminUI\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.DEAT.AdminUI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.DEAT.AdminUI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.DEAT.AdminUI.props",
+      "PackagePath": "build\\DEAT.AdminUI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.DEAT.AdminUI.props",
+      "PackagePath": "buildMultiTargeting\\DEAT.AdminUI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.DEAT.AdminUI.props",
+      "PackagePath": "buildTransitive\\DEAT.AdminUI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
