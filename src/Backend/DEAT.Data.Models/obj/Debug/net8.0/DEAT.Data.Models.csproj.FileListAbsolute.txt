@@ -20,3 +20,4 @@ C:\Projects\deat\src\Backend\DEAT.Data.Models\obj\Debug\net8.0\DEAT.Data.Models.
 C:\Projects\deat\src\Backend\DEAT.Data.Models\obj\Debug\net8.0\refint\DEAT.Data.Models.dll
 C:\Projects\deat\src\Backend\DEAT.Data.Models\obj\Debug\net8.0\DEAT.Data.Models.pdb
 C:\Projects\deat\src\Backend\DEAT.Data.Models\obj\Debug\net8.0\ref\DEAT.Data.Models.dll
+C:\Projects\deat\src\Backend\DEAT.Data.Models\obj\Debug\net8.0\DEAT.Data.Models.sourcelink.json

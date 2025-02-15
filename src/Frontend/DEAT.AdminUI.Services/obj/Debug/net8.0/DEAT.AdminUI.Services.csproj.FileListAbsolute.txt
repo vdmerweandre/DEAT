@@ -13,3 +13,4 @@ C:\Projects\deat\src\Frontend\DEAT.AdminUI.Services\obj\Debug\net8.0\DEAT.AdminU
 C:\Projects\deat\src\Frontend\DEAT.AdminUI.Services\obj\Debug\net8.0\refint\DEAT.AdminUI.Services.dll
 C:\Projects\deat\src\Frontend\DEAT.AdminUI.Services\obj\Debug\net8.0\DEAT.AdminUI.Services.pdb
 C:\Projects\deat\src\Frontend\DEAT.AdminUI.Services\obj\Debug\net8.0\ref\DEAT.AdminUI.Services.dll
+C:\Projects\deat\src\Frontend\DEAT.AdminUI.Services\obj\Debug\net8.0\DEAT.AdminUI.Services.sourcelink.json

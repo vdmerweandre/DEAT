@@ -2,7 +2,6 @@
 
 @rendermode InteractiveServer
 
-<!-- Transactions.razor -->
 @inject DEAT.AdminUI.Services.Contracts.IAccountService AccountService
 
 
@@ -12,7 +11,7 @@
 
 
 @code {
-    private IEnumerable<AccountDto> AccountList = new List<AccountDto>();
+    private IEnumerable<Account> AccountList = new List<Account>();
 
     protected override async Task OnInitializedAsync()
     {

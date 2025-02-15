@@ -48,3 +48,4 @@ C:\Projects\deat\src\Backend\DEAT.WebAPI\bin\Debug\net8.0\Microsoft.Extensions.L
 C:\Projects\deat\src\Backend\DEAT.WebAPI\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Projects\deat\src\Backend\DEAT.WebAPI\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\Projects\deat\src\Backend\DEAT.WebAPI\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
+C:\Projects\deat\src\Backend\DEAT.WebAPI\obj\Debug\net8.0\DEAT.WebAPI.sourcelink.json

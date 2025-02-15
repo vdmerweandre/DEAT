@@ -1,14 +1,17 @@
-﻿namespace DEAT.WebAPI.Services.Statemachine
+﻿using DEAT.Data.Models.Dtos;
+
+namespace DEAT.WebAPI.Services.Statemachine
 {
     //Commands
     //Internal
-    public record ProcessTransaction(Guid TransactionId, Guid DebitAccountId, TransactionLeg[] TransactionLegs, decimal Amount);
-    public record CreditAccount(Guid TransactionId, Guid AccountId, decimal Amount);
+    public record ProcessTransaction(Guid TransactionId, JournalDetail[] JournalDetails);
+    public record DebitAccount(Guid TransactionId, JournalDetail JournalDetail);
+    public record CreditAccount(Guid TransactionId, JournalDetail JournalDetail);
     public record ConfirmTransaction(Guid TransactionId);
     public record UpdateTransactionStatus(Guid TransactionId, string status);
 
     //Events - messages that can trigger state transitions. They must be correlated to a specific saga instance
-    public record TransactionCreated(Guid TransactionId, Guid DebitAccountId, TransactionLeg[] TransactionLegs, decimal Amount);
+    public record TransactionCreated(Guid TransactionId, JournalEntry JournalEntry);
     public record TransactionSucceeded(Guid TransactionId);
     public record TransactionApproved(Guid TransactionId);
     public record TransactionProcessed(Guid TransactionId);

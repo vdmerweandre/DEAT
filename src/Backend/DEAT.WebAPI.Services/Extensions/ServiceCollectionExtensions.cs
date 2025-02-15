@@ -21,6 +21,7 @@ namespace DEAT.WebAPI.Services.Extensions
 
                 x.AddConsumer<DebitAccountConsumer>();
                 x.AddConsumer<CreditAccountConsumer>();
+                x.AddConsumer<ProcessTransactionConsumer>();
                 x.AddConsumer<UpdateTransactionStatusConsumer>();
                 x.AddConsumer<ConfirmTransactionConsumer>();
 
@@ -37,14 +38,14 @@ namespace DEAT.WebAPI.Services.Extensions
                 });
             });
 
-            services.AddSingleton<IAccountService, AccountService>();
-            services.AddSingleton<ITransactionService, TransactionService>();
-            services.AddScoped<IMessageService, MessageService>();
-
             services.AddSingleton<AuditStateObserver<TransactionStateMachineInstance>>();
             services.AddSingleton<AuditEventObserver<TransactionStateMachineInstance>>();
 
+            services.AddSingleton<IAccountService, AccountService>();
+            services.AddSingleton<IJournalService, JournalService>();
+            services.AddSingleton<ILedgerService, LedgerService>();
             services.AddSingleton<StateChangeLogService>();
+            services.AddScoped<IMessageService, MessageService>();
 
             return services;
         }

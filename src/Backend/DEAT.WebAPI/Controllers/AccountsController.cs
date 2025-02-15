@@ -12,14 +12,14 @@ namespace DEAT.WebAPI.Controllers
     {
         [HttpGet(Name = "GetAllAccounts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IEnumerable<AccountDto>> GetAllAccounts()
+        public async Task<IEnumerable<Account>> GetAllAccounts()
         {
             return await accountService.GetAllAccountsAsync();
         }
 
         [HttpPost(Name = "CreateAccount")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<Guid> CreateAccount(AccountDto account)
+        public async Task<Guid> CreateAccount(Account account)
         {
             return await accountService.CreateAccountAsync(account);
         }

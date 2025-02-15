@@ -48,6 +48,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Projects/deat/src/Frontend/DEAT.AdminUI/Components/Pages/Ledger/LedgerEntries.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMZWRnZXJcTGVkZ2VyRW50cmllcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Projects/deat/src/Frontend/DEAT.AdminUI/Components/Pages/Transactions/CreateTransaction.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUcmFuc2FjdGlvbnNcQ3JlYXRlVHJhbnNhY3Rpb24ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

@@ -40,13 +40,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DEAT.AdminUI.3om1e4kybw.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"3om1e4kybw"},{"Name":"integrity","Value":"sha256-A0d/2GBiQPsxbpqhsHlKsUB\u002B5ASA5KqOXyxXWJgqPYw="},{"Name":"label","Value":"_content/DEAT.AdminUI/DEAT.AdminUI.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5907"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022A0d/2GBiQPsxbpqhsHlKsUB\u002B5ASA5KqOXyxXWJgqPYw=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Feb 2025 02:33:19 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5907"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022A0d/2GBiQPsxbpqhsHlKsUB\u002B5ASA5KqOXyxXWJgqPYw=\u0022"},{"Name":"Last-Modified","Value":"Fri, 14 Feb 2025 23:41:42 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DEAT.AdminUI/DEAT.AdminUI.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DEAT.AdminUI.3om1e4kybw.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-A0d/2GBiQPsxbpqhsHlKsUB\u002B5ASA5KqOXyxXWJgqPYw="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"5907"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022A0d/2GBiQPsxbpqhsHlKsUB\u002B5ASA5KqOXyxXWJgqPYw=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Feb 2025 02:33:19 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"5907"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022A0d/2GBiQPsxbpqhsHlKsUB\u002B5ASA5KqOXyxXWJgqPYw=\u0022"},{"Name":"Last-Modified","Value":"Fri, 14 Feb 2025 23:41:42 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DEAT.AdminUI/favicon.ifv42okdf2.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\favicon.png'))</AssetFile>

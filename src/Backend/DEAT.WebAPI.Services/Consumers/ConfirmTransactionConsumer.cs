@@ -4,7 +4,7 @@ using MassTransit;
 
 namespace DEAT.WebAPI.Services.Consumers
 {
-    public class ConfirmTransactionConsumer(ITransactionService transactionService) : IConsumer<ConfirmTransaction>
+    public class ConfirmTransactionConsumer(IJournalService transactionService) : IConsumer<ConfirmTransaction>
     {
         public async Task Consume(ConsumeContext<ConfirmTransaction> context)
         {

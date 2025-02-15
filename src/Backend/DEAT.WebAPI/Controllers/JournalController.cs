@@ -7,36 +7,28 @@ namespace DEAT.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TransactionsController(
+    public class JournalController(
         IMessageService messageService,
-        ITransactionService transactionService,
-        ILogger<TransactionsController> logger) : ControllerBase
+        IJournalService journalService,
+        ILogger<JournalController> logger) : ControllerBase
     {
         [HttpGet(Name = "GetAllTransactions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IEnumerable<TransactionDto>> GetAllTransactions()
+        public async Task<IEnumerable<JournalEntry>> GetAllTransactions()
         {
-            return await transactionService.GetTransactionsAsync();
+            return await journalService.GetJournalEntriesAsync();
         }
 
         [HttpPost(Name = "CreateTransaction")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<Guid> CreateTransaction(TransactionDto transaction)
+        public async Task<Guid> CreateTransaction([FromBody] JournalEntry transaction)
         {
-            Guid transactionId = await transactionService.CreateTransactionAsync(transaction);
+            Guid transactionId = await journalService.CreateJournalEntryAsync(transaction);
 
             // Publish the StartTransaction event
             await messageService.SendCommand(new TransactionCreated(
                 transactionId,
-                transaction.DebitAccountId,
-                transaction.TransactionLegs.Select(l => new TransactionLeg
-                {
-                    TransactionLegId = l.TransactionLegId,
-                    CreditAccountId = l.CreditAccountId,
-                    Amount = l.Amount,
-                    State = l.State
-                }).ToArray(),
-                transaction.Amount
+                transaction
             ));
 
             return transactionId;
@@ -47,7 +39,7 @@ namespace DEAT.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Guid> ApproveTransaction([FromRoute] Guid transactionId)
         {
-            bool success = await transactionService.ApproveTransactionAsync(transactionId);
+            bool success = await journalService.ApproveTransactionAsync(transactionId);
 
             if (success)
             {
@@ -63,7 +55,7 @@ namespace DEAT.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Guid> ConfirmTransactionLeg([FromRoute] Guid transactionId, [FromRoute] Guid transactionLegId)
         {
-            bool success = await transactionService.ConfirmTransactionLegAsync(transactionId, transactionLegId);
+            bool success = await journalService.ConfirmTransactionLegAsync(transactionId, transactionLegId);
 
             if (success)
             {
@@ -79,7 +71,7 @@ namespace DEAT.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Guid> CancelTransaction([FromRoute] Guid transactionId)
         {
-            bool success = await transactionService.CancelTransactionAsync(transactionId);
+            bool success = await journalService.CancelTransactionAsync(transactionId);
 
             if (success)
             {
@@ -95,7 +87,7 @@ namespace DEAT.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Guid> RetryTransaction([FromRoute] Guid transactionId)
         {
-            bool success = await transactionService.RetryTransactionAsync(transactionId);
+            bool success = await journalService.RetryTransactionAsync(transactionId);
 
             if (success)
             {

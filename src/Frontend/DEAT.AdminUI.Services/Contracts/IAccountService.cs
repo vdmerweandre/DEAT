@@ -4,7 +4,7 @@ namespace DEAT.AdminUI.Services.Contracts
 {
     public interface IAccountService
     {
-        Task<IEnumerable<AccountDto>> GetAllAccountsAsync();
-        Task<Guid> CreateAccountAsync(AccountDto account);
+        Task<IEnumerable<Account>> GetAllAccountsAsync();
+        Task<Guid> CreateAccountAsync(Account account);
     }
 }

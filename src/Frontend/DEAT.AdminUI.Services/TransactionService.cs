@@ -10,9 +10,9 @@ namespace DEAT.AdminUI.Services
         IHttpClientFactory httpClientFactory,
         ILogger<TransactionService> logger) : ITransactionService
     {
-        private const string _baseUri = "/api/transactions";
+        private const string _baseUri = "/api/journal";
 
-        public async Task<IEnumerable<TransactionDto>> GetAllTransactionsAsync()
+        public async Task<IEnumerable<JournalEntry>> GetAllTransactionsAsync()
         {
             // Create the client
             using HttpClient client = httpClientFactory.CreateClient("WebApi");
@@ -21,21 +21,21 @@ namespace DEAT.AdminUI.Services
             {
                 // Make HTTP GET request
                 // Parse JSON response deserialize into TransactionDto types
-                List<TransactionDto>? transactions = await client.GetFromJsonAsync<List<TransactionDto>>(
+                List<JournalEntry>? transactions = await client.GetFromJsonAsync<List<JournalEntry>>(
                     _baseUri,
                     new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-                return transactions ?? Enumerable.Empty<TransactionDto>();
+                return transactions ?? Enumerable.Empty<JournalEntry>();
             }
             catch (Exception ex)
             {
                 logger.LogError("Error getting GetAllTransactionsAsync: {Error}", ex);
             }
 
-            return Enumerable.Empty<TransactionDto>();
+            return Enumerable.Empty<JournalEntry>();
         }
 
-        public async Task<Guid> CreateTransactionAsync(TransactionDto transction)
+        public async Task<Guid> CreateTransactionAsync(JournalEntry transaction)
         {
             // Create the client
             using HttpClient client = httpClientFactory.CreateClient("WebApi");
@@ -44,9 +44,9 @@ namespace DEAT.AdminUI.Services
             {
                 // Make HTTP GET request
                 // Parse JSON response deserialize into AccountDto types
-                var response = await client.PostAsJsonAsync<TransactionDto>(
+                var response = await client.PostAsJsonAsync<JournalEntry>(
                     _baseUri,
-                    transction,
+                    transaction,
                     new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
                 response.EnsureSuccessStatusCode();

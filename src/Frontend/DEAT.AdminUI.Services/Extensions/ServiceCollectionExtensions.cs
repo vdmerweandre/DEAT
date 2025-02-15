@@ -16,6 +16,7 @@ namespace DEAT.AdminUI.Services.Extensions
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAuditService, AuditService>();
+            services.AddScoped<ILedgerService, LedgerService>();
 
             return services;
         }

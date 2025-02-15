@@ -1,6 +1,6 @@
 ﻿namespace DEAT.Data.Models.Dtos
 {
-    public class AccountDto
+    public class Account
     {
         public Guid AccountId { get; set; }
         public string Category { get; set; }
@@ -9,7 +9,7 @@
         {
             get
             {
-                return Credit - Debit;
+                return Debit - Credit;
 }
         }
 

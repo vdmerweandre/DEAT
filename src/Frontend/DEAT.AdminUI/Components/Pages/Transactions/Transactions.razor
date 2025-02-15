@@ -6,14 +6,14 @@
 @inject DEAT.AdminUI.Services.Contracts.ITransactionService TransactionService
 @inject DEAT.AdminUI.Services.Contracts.IAccountService AccountService
 
-<PageTitle>Transactions</PageTitle>
+<PageTitle>Journal</PageTitle>
 
-<h1>Transactions</h1>
+<h1>Journal Entries</h1>
 
 
 @code {
-    private IEnumerable<TransactionDto> TransactionList = new List<TransactionDto>();
-    private IEnumerable<AccountDto> Accounts = new List<AccountDto>();
+    private IEnumerable<JournalEntry> TransactionList = new List<JournalEntry>();
+    private IEnumerable<Account> Accounts = new List<Account>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -21,10 +21,22 @@
         TransactionList = await TransactionService.GetAllTransactionsAsync();
     }
 
+    private string GetTransactionState(Guid transactionId)
+    {
+        var transaction = TransactionList.FirstOrDefault(a => a.TransactionId == transactionId);
+        return transaction.State ?? "Unknown State";
+    }
+
     private string GetAccountName(Guid accountId)
     {
         var account = Accounts.FirstOrDefault(a => a.AccountId == accountId);
         return account?.AccountName ?? "Unknown Account";
+    }
+
+    private string GetAccountCategory(Guid accountId)
+    {
+        var account = Accounts.FirstOrDefault(a => a.AccountId == accountId);
+        return account?.Category ?? "Unknown Category";
     }
 
     private HashSet<Guid> CollapsedTransactions { get; set; } = new HashSet<Guid>();
@@ -83,9 +95,12 @@
     <thead>
         <tr>
             <th>Transaction ID</th>
-            <th>Debit Account</th>
-            <th>Total Amount</th>
-            <th>Status</th>
+            <th>Time</th>
+            <th>Reference</th>
+            <th>Debits</th>
+            <th>Credits</th>
+            <th>Net Balance</th>
+            <th>State</th>
         </tr>
     </thead>
     <tbody>
@@ -98,27 +113,30 @@
                         @transaction.TransactionId
                     </button>
                 </td>
-                <td>@GetAccountName(transaction.DebitAccountId)</td>
-                <td>@transaction.Amount</td>
-                <td>@transaction.Status</td>
+                <td>@transaction.Timestamp</td>
+                <td>@transaction.Reference</td>
+                <td>@transaction.DebitAmount</td>
+                <td>@transaction.CreditAmount</td>
+                <td>@transaction.NetBalance</td>
+                <td>@transaction.State</td>
                 <td>
                     <button class="btn btn-primary btn-sm"
-                        @onclick="() => ApproveTransaction(transaction.TransactionId)" 
-                            disabled="@(transaction.Status != "Created")">
+                        @onclick="() => ApproveTransaction(transaction.TransactionId)"
+                            disabled="@(transaction.State != "Created")">
                         Approve
                     </button>
                 </td>
                 <td>
                     <button class="btn btn-warning btn-sm"
                             @onclick="() => RetryTransaction(transaction.TransactionId)"
-                            disabled="@(transaction.Status != "Failed")">
+                            disabled="@(transaction.State != "Failed")">
                         Retry
                     </button>
                 </td>
                 <td>
                     <button class="btn btn-danger btn-sm"
                         @onclick="() => CancelTransaction(transaction.TransactionId)"
-                            disabled="@(transaction.Status != "Created")">
+                            disabled="@(transaction.State != "Created")">
                         Cancel
                     </button>
                 </td>
@@ -131,23 +149,27 @@
                             <thead>
                                 <tr>
                                     <th>Transaction Leg ID</th>
-                                    <th>Credit Account</th>
+                                    <th>Account</th>
+                                    <th>Category</th>
+                                    <th>Side</th>
                                     <th>Amount</th>
                                     <th>State</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var leg in transaction.TransactionLegs)
+                                @foreach (var leg in transaction.JournalDetails)
                                 {
                                     <tr>
                                         <td>@leg.TransactionLegId</td>
-                                        <td>@GetAccountName(@leg.CreditAccountId)</td>
+                                        <td>@GetAccountName(@leg.AccountId)</td>
+                                        <td>@GetAccountCategory(@leg.AccountId)</td>
+                                        <td>@leg.Side</td>
                                         <td>@leg.Amount</td>
                                         <td>@leg.State</td>
                                         <td>
                                             <button class="btn btn-success btn-sm" 
                                             @onclick="() => ConfirmTransactionLeg(transaction.TransactionId, leg.TransactionLegId)"
-                                                    disabled=" @(transaction.Status !="Processed" )">
+                                                    disabled="@(GetTransactionState(transaction.TransactionId) !="Processed" )">
                                                 Confirm
                                             </button>
                                         </td>

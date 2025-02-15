@@ -3,11 +3,11 @@ using DEAT.Data.Models.Dtos;
 
 namespace DEAT.WebAPI.Services.Contracts
 {
-    public interface ITransactionService
+    public interface IJournalService
     {
-        Task<List<TransactionDto>> GetTransactionsAsync();
-        Task<Guid> CreateTransactionAsync(TransactionDto transaction);
-        Task<Guid> UpdateTransactionStateAsync(Guid transactionId, string state);
+        Task<List<JournalEntry>> GetJournalEntriesAsync();
+        Task<Guid> CreateJournalEntryAsync(JournalEntry transaction);
+        Task<Guid> UpdateJournalStateAsync(Guid transactionId, string state);
         Task<bool> ApproveTransactionAsync(Guid transactionId);
         Task<bool> CancelTransactionAsync(Guid transactionId);
         Task<bool> RetryTransactionAsync(Guid transactionId);

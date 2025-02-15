@@ -1,0 +1,60 @@
+﻿@page "/ledger-entries"
+
+<h3></h3>
+
+@inject DEAT.AdminUI.Services.Contracts.ILedgerService LedgerService
+@inject DEAT.AdminUI.Services.Contracts.IAccountService AccountService
+
+<PageTitle>Ledger</PageTitle>
+
+<h1>Ledger Entries</h1>
+
+@code {
+    private IEnumerable<LedgerEntry> Ledger = new List<LedgerEntry>();
+    private IEnumerable<Account> Accounts = new List<Account>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Accounts = await AccountService.GetAllAccountsAsync();
+        Ledger = await LedgerService.GetLedgerEntriesAsync();
+    }
+
+    private string GetAccountName(Guid accountId)
+    {
+        var account = Accounts.FirstOrDefault(a => a.AccountId == accountId);
+        return account?.AccountName ?? "Unknown Account";
+    }
+}
+
+<h3>Ledger Entries</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>TransactionId</th>
+            <th>TransactionLegId</th>
+            <th>AccountId</th>
+            <th>Account Name</th>
+            <th>Amount</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Ledger)
+        {
+            <tr>
+                <td>@entry.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff")</td>
+                <td>@entry.TransactionId</td>
+                <td>@entry.TransactionLegId</td>
+                <td>@entry.AccountId</td>
+                <td>@GetAccountName(@entry.AccountId)</td>
+                <td>
+                    <span style="color: @(entry.Side == "Credit" ? "red" : "black");">
+                        @(entry.Side == "Credit" ? $"-{entry.Amount}" : entry.Amount.ToString())
+                    </span>
+                </td>
+                <td>@entry.Side</td>
+            </tr>
+        }
+    </tbody>
+</table>

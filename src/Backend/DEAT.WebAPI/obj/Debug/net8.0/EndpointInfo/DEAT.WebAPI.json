@@ -19,7 +19,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AccountDto"
+                    "$ref": "#/components/schemas/Account"
                   }
                 }
               },
@@ -27,7 +27,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AccountDto"
+                    "$ref": "#/components/schemas/Account"
                   }
                 }
               },
@@ -35,7 +35,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AccountDto"
+                    "$ref": "#/components/schemas/Account"
                   }
                 }
               }
@@ -52,17 +52,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AccountDto"
+                "$ref": "#/components/schemas/Account"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AccountDto"
+                "$ref": "#/components/schemas/Account"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AccountDto"
+                "$ref": "#/components/schemas/Account"
               }
             }
           }
@@ -172,10 +172,10 @@
         }
       }
     },
-    "/api/Transactions": {
+    "/api/Journal": {
       "get": {
         "tags": [
-          "Transactions"
+          "Journal"
         ],
         "operationId": "GetAllTransactions",
         "responses": {
@@ -186,7 +186,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TransactionDto"
+                    "$ref": "#/components/schemas/JournalEntry"
                   }
                 }
               },
@@ -194,7 +194,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TransactionDto"
+                    "$ref": "#/components/schemas/JournalEntry"
                   }
                 }
               },
@@ -202,7 +202,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TransactionDto"
+                    "$ref": "#/components/schemas/JournalEntry"
                   }
                 }
               }
@@ -212,24 +212,24 @@
       },
       "post": {
         "tags": [
-          "Transactions"
+          "Journal"
         ],
         "operationId": "CreateTransaction",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TransactionDto"
+                "$ref": "#/components/schemas/JournalEntry"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/TransactionDto"
+                "$ref": "#/components/schemas/JournalEntry"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/TransactionDto"
+                "$ref": "#/components/schemas/JournalEntry"
               }
             }
           }
@@ -261,10 +261,10 @@
         }
       }
     },
-    "/api/Transactions/{transactionId}/approve": {
+    "/api/Journal/{transactionId}/approve": {
       "put": {
         "tags": [
-          "Transactions"
+          "Journal"
         ],
         "parameters": [
           {
@@ -324,10 +324,10 @@
         }
       }
     },
-    "/api/Transactions/{transactionId}/legs/{transactionLegId}/confirm": {
+    "/api/Journal/{transactionId}/legs/{transactionLegId}/confirm": {
       "put": {
         "tags": [
-          "Transactions"
+          "Journal"
         ],
         "parameters": [
           {
@@ -396,10 +396,10 @@
         }
       }
     },
-    "/api/Transactions/{transactionId}/cancel": {
+    "/api/Journal/{transactionId}/cancel": {
       "put": {
         "tags": [
-          "Transactions"
+          "Journal"
         ],
         "parameters": [
           {
@@ -459,10 +459,10 @@
         }
       }
     },
-    "/api/Transactions/{transactionId}/retry": {
+    "/api/Journal/{transactionId}/retry": {
       "put": {
         "tags": [
-          "Transactions"
+          "Journal"
         ],
         "parameters": [
           {
@@ -515,6 +515,45 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Ledger": {
+      "get": {
+        "tags": [
+          "Ledger"
+        ],
+        "operationId": "GetLegerEntries",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LedgerEntry"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LedgerEntry"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LedgerEntry"
+                  }
                 }
               }
             }
@@ -564,7 +603,7 @@
   },
   "components": {
     "schemas": {
-      "AccountDto": {
+      "Account": {
         "type": "object",
         "properties": {
           "accountId": {
@@ -611,6 +650,114 @@
             "nullable": true
           },
           "exceptionMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JournalDetail": {
+        "type": "object",
+        "properties": {
+          "transactionLegId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "accountId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "side": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "JournalEntry": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reference": {
+            "type": "string",
+            "nullable": true
+          },
+          "journalDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JournalDetail"
+            },
+            "nullable": true
+          },
+          "netBalance": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "debitAmount": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "creditAmount": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LedgerEntry": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "transactionLegId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "accountId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "side": {
             "type": "string",
             "nullable": true
           },
@@ -674,57 +821,6 @@
           "timestamp": {
             "type": "string",
             "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "TransactionDto": {
-        "type": "object",
-        "properties": {
-          "transactionId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "debitAccountId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "transactionLegs": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TransactionLegDto"
-            },
-            "nullable": true
-          },
-          "amount": {
-            "type": "number",
-            "format": "double"
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "TransactionLegDto": {
-        "type": "object",
-        "properties": {
-          "transactionLegId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "creditAccountId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "amount": {
-            "type": "number",
-            "format": "double"
-          },
-          "state": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false

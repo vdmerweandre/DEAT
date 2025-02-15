@@ -39,10 +39,12 @@ namespace DEAT.WebAPI.Services.Statemachine
                 When(TransactionCreated)
                     .Then(context =>
                     {
-                        context.Saga.TransactionId = context.Message.TransactionId;
-                        context.Saga.DebitAccountId = context.Message.DebitAccountId;
-                        context.Saga.TransactionLegs = context.Message.TransactionLegs;
-                        context.Saga.Amount = context.Message.Amount;
+                        context.Saga.CorrelationId = context.Message.TransactionId;
+                        context.Saga.TransactionId = context.Message.JournalEntry.TransactionId;
+                        context.Saga.JournalDetails = context.Message.JournalEntry.JournalDetails;
+                        context.Saga.Timestamp = context.Message.JournalEntry.Timestamp;
+                        context.Saga.Reference = context.Message.JournalEntry.Reference;
+                        context.Saga.State = context.Message.JournalEntry.State;
                     })
                     .TransitionTo(Created)
                     .Publish(context => new UpdateTransactionStatus(
@@ -55,19 +57,17 @@ namespace DEAT.WebAPI.Services.Statemachine
                 When(TransactionApproved)
                     .TransitionTo(Approved)
                     .Publish(context => new UpdateTransactionStatus(
-                        context.Saga.TransactionId,
+                        context.Saga.CorrelationId,
                         "Approved")
                     )
                     .Publish(context => new ProcessTransaction(
                         context.Saga.TransactionId,
-                        context.Saga.DebitAccountId,
-                        context.Saga.TransactionLegs,
-                        context.Saga.Amount)
+                        context.Saga.JournalDetails)
                     ),
                 When(TransactionCancelled)
                     .TransitionTo(Cancelled)
                     .Publish(context => new UpdateTransactionStatus(
-                        context.Saga.TransactionId,
+                        context.Saga.CorrelationId,
                         "Cancelled")
                     )
             );
@@ -76,13 +76,13 @@ namespace DEAT.WebAPI.Services.Statemachine
                 When(TransactionProcessed)
                     .TransitionTo(Processed)
                     .Publish(context => new UpdateTransactionStatus(
-                        context.Saga.TransactionId,
+                        context.Saga.CorrelationId,
                         "Processed")
                     ),
                 When(TransactionFailed)
                     .TransitionTo(Failed)
                     .Publish(context => new UpdateTransactionStatus(
-                        context.Saga.TransactionId,
+                        context.Saga.CorrelationId,
                         "Failed")
                     )
             );
@@ -91,12 +91,12 @@ namespace DEAT.WebAPI.Services.Statemachine
                 //no state transition, keep trying to confirm transaction untill TransactionSucceeded event
                 When(TransactionLegConfirmed)
                     .Publish(context => new ConfirmTransaction(
-                        context.Saga.TransactionId)
+                        context.Saga.CorrelationId)
                     ),
                 When(TransactionSucceeded)
                     .TransitionTo(Completed)
                     .Publish(context => new UpdateTransactionStatus(
-                        context.Saga.TransactionId,
+                        context.Saga.CorrelationId,
                         "Success")
                     )
             );

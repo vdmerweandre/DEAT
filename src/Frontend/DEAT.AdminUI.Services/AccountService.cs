@@ -12,7 +12,7 @@ namespace DEAT.AdminUI.Services
     {
         private const string _baseUri = "/api/accounts";
 
-        public async Task<IEnumerable<AccountDto>> GetAllAccountsAsync()
+        public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
             // Create the client
             using HttpClient client = httpClientFactory.CreateClient("WebApi");
@@ -21,21 +21,21 @@ namespace DEAT.AdminUI.Services
             {
                 // Make HTTP GET request
                 // Parse JSON response deserialize into AccountDto types
-                List<AccountDto>? accounts = await client.GetFromJsonAsync<List<AccountDto>>(
+                List<Account>? accounts = await client.GetFromJsonAsync<List<Account>>(
                     _baseUri,
                     new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-                return accounts ?? Enumerable.Empty<AccountDto>();
+                return accounts ?? Enumerable.Empty<Account>();
             }
             catch (Exception ex)
             {
                 logger.LogError("Error getting GetAllTransactionsAsync: {Error}", ex);
             }
 
-            return Enumerable.Empty<AccountDto>();
+            return Enumerable.Empty<Account>();
         }
 
-        public async Task<Guid> CreateAccountAsync(AccountDto account)
+        public async Task<Guid> CreateAccountAsync(Account account)
         {
             // Create the client
             using HttpClient client = httpClientFactory.CreateClient("WebApi");
@@ -44,7 +44,7 @@ namespace DEAT.AdminUI.Services
             {
                 // Make HTTP GET request
                 // Parse JSON response deserialize into AccountDto types
-                var response = await client.PostAsJsonAsync<AccountDto>(
+                var response = await client.PostAsJsonAsync<Account>(
                     _baseUri,
                     account,
                     new JsonSerializerOptions(JsonSerializerDefaults.Web));

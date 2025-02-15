@@ -56,3 +56,4 @@ C:\Projects\deat\src\Frontend\DEAT.AdminUI\obj\Debug\net8.0\refint\DEAT.AdminUI.
 C:\Projects\deat\src\Frontend\DEAT.AdminUI\obj\Debug\net8.0\DEAT.AdminUI.pdb
 C:\Projects\deat\src\Frontend\DEAT.AdminUI\obj\Debug\net8.0\DEAT.AdminUI.genruntimeconfig.cache
 C:\Projects\deat\src\Frontend\DEAT.AdminUI\obj\Debug\net8.0\ref\DEAT.AdminUI.dll
+C:\Projects\deat\src\Frontend\DEAT.AdminUI\obj\Debug\net8.0\DEAT.AdminUI.sourcelink.json

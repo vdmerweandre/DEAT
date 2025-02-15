@@ -5,12 +5,12 @@
 @inject DEAT.AdminUI.Services.Contracts.IAccountService AccountService
 @inject DEAT.AdminUI.Services.Contracts.ITransactionService TransactionService
 
-<PageTitle>Create Transaction</PageTitle>
+<PageTitle>Create Journal Entry</PageTitle>
 
 @code {
 
-    private TransactionDto NewTransaction = new();
-    private IEnumerable<AccountDto> Accounts = new List<AccountDto>();
+    private JournalEntry NewTransaction = new();
+    private IEnumerable<Account> Accounts = new List<Account>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -24,24 +24,36 @@
         NewTransaction = new();
     }
 
-    private void AddTransactionLeg()
+    private void UpdateAccountAndCategory(JournalDetail leg, string selectedAccountId)
     {
-        var newLegs = NewTransaction.TransactionLegs.ToList();
-        newLegs.Add(new TransactionLegDto
-            {
-                TransactionLegId = Guid.NewGuid(),
-                CreditAccountId = Guid.Empty,
-                Amount = 0,
-                State = string.Empty
-            });
-        NewTransaction.TransactionLegs = newLegs.ToArray();
+        // Find the selected account
+        var account = Accounts.FirstOrDefault(a => a.AccountId == Guid.Parse(selectedAccountId));
+        if (account != null)
+        {
+            leg.AccountId = account.AccountId;
+            leg.Category = account.Category; // Populate the Category field automatically
+        }
     }
 
-    private void RemoveTransactionLeg(TransactionLegDto leg)
+    private void AddTransactionLeg()
     {
-        var updatedLegs = NewTransaction.TransactionLegs.ToList();
+        var newLegs = NewTransaction.JournalDetails.ToList();
+        newLegs.Add(new JournalDetail
+            {
+                TransactionLegId = Guid.NewGuid(),
+                AccountId = Guid.Empty,
+                Amount = 0,
+                Side = "Debit",
+                State = string.Empty
+            });
+        NewTransaction.JournalDetails = newLegs.ToArray();
+    }
+
+    private void RemoveTransactionLeg(JournalDetail leg)
+    {
+        var updatedLegs = NewTransaction.JournalDetails.ToList();
         updatedLegs.Remove(leg);
-        NewTransaction.TransactionLegs = updatedLegs.ToArray();
+        NewTransaction.JournalDetails = updatedLegs.ToArray();
     }
 
     private void Cancel()
@@ -50,45 +62,31 @@
     }
 }
 
-<h3>Create New Transaction</h3>
+<h3>Create Journal Entry</h3>
 
-    <div class="mb-3">
-        <label class="form-label">Debit Account</label>
-        <select class="form-select" @bind="NewTransaction.DebitAccountId">
-            <option value="">-- Select Debit Account --</option>
-            @foreach (var categoryGroup in Accounts.GroupBy(a => a.Category))
-            {
-                <optgroup label="@categoryGroup.Key">
-                    @foreach (var account in categoryGroup)
-                    {
-                        <option value="@account.AccountId">@account.AccountName (@account.Balance)</option>
-                    }
-                </optgroup>
-            }
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label for="TransactionAmount" class="form-label">Transaction Amount</label>
-        <input type="number" id="TransactionAmount" step="0.01" class="form-control" @bind="NewTransaction.Amount" />
+    <div>
+        <label class="form-label">Reference</label>
+        <input type="text" class="form-control" @bind="NewTransaction.Reference" />
     </div>
 
     <h4>Transaction Legs</h4>
+
     <table class="table">
         <thead>
             <tr>
-                <th>Credit Account</th>
+                <th>Account</th>
                 <th>Amount</th>
+                <th>Side</th>
                 <th>State</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var leg in NewTransaction.TransactionLegs)
+            @foreach (var leg in NewTransaction.JournalDetails)
             {
                 <tr>
                     <td>
-                        <select class="form-select" @bind="leg.CreditAccountId">
+                    <select class="form-select" @onchange="(e) => UpdateAccountAndCategory(leg, e.Value.ToString())">
                             @foreach (var categoryGroup in Accounts.GroupBy(a => a.Category))
                             {
                                 <optgroup label="@categoryGroup.Key">
@@ -104,7 +102,13 @@
                         <input type="number" class="form-control" @bind="leg.Amount" />
                     </td>
                     <td>
-                        <input type="text" class="form-control" @bind="leg.State" />
+                        <select class="form-select" @bind="leg.Side">
+                            <option value="Debit">Debit</option>
+                            <option value="Credit">Credit</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" disabled="true" @bind="leg.State" />
                     </td>
                     <td>
                         <button class="btn btn-danger" @onclick="(() => RemoveTransactionLeg(leg))">Remove</button>

@@ -4,27 +4,25 @@ using MassTransit;
 
 namespace DEAT.WebAPI.Services.Consumers
 {
-    public class DebitAccountConsumer : IConsumer<ProcessTransaction>
+    public class DebitAccountConsumer(
+        IAccountService accountService,
+        ILedgerService ledgerService) : IConsumer<DebitAccount>
     {
-        private readonly IAccountService _accountService;
-
-        public DebitAccountConsumer(IAccountService accountService)
+        public async Task Consume(ConsumeContext<DebitAccount> context)
         {
-            _accountService = accountService;
-        }
-
-        public async Task Consume(ConsumeContext<ProcessTransaction> context)
-        {
-            var success = await _accountService.DebitAccountAsync(context.Message.DebitAccountId, context.Message.Amount);
+            var success = await accountService.DebitAccountAsync(context.Message.JournalDetail.AccountId, context.Message.JournalDetail.Amount);
 
             if (success)
             {
-                foreach (var leg in context.Message.TransactionLegs)
+                await ledgerService.AppendAsync(new Data.Models.Dtos.LedgerEntry
                 {
-                    await context.Publish(new CreditAccount(context.Message.TransactionId, leg.CreditAccountId, leg.Amount));
-                }
-
-                await context.Publish(new TransactionProcessed(context.Message.TransactionId));
+                    TransactionId = context.Message.TransactionId,
+                    TransactionLegId = context.Message.JournalDetail.TransactionLegId,
+                    Amount = context.Message.JournalDetail.Amount,
+                    AccountId = context.Message.JournalDetail.AccountId,
+                    Side = "Debit",
+                    Timestamp = DateTime.UtcNow
+                });
             }
             else
             {

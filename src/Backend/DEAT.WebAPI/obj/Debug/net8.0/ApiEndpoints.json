@@ -9,7 +9,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[DEAT.Data.Models.Dtos.AccountDto, DEAT.Data.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DEAT.Data.Models.Dtos.Account, DEAT.Data.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -30,7 +30,7 @@
     "Parameters": [
       {
         "Name": "account",
-        "Type": "DEAT.Data.Models.Dtos.AccountDto",
+        "Type": "DEAT.Data.Models.Dtos.Account",
         "IsRequired": true
       }
     ],
@@ -90,16 +90,16 @@
     "EndpointName": "GetStateChangeLogs"
   },
   {
-    "ContainingType": "DEAT.WebAPI.Controllers.TransactionsController",
+    "ContainingType": "DEAT.WebAPI.Controllers.JournalController",
     "Method": "GetAllTransactions",
-    "RelativePath": "api/Transactions",
+    "RelativePath": "api/Journal",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[DEAT.Data.Models.Dtos.TransactionDto, DEAT.Data.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DEAT.Data.Models.Dtos.JournalEntry, DEAT.Data.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -111,16 +111,16 @@
     "EndpointName": "GetAllTransactions"
   },
   {
-    "ContainingType": "DEAT.WebAPI.Controllers.TransactionsController",
+    "ContainingType": "DEAT.WebAPI.Controllers.JournalController",
     "Method": "CreateTransaction",
-    "RelativePath": "api/Transactions",
+    "RelativePath": "api/Journal",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "transaction",
-        "Type": "DEAT.Data.Models.Dtos.TransactionDto",
+        "Type": "DEAT.Data.Models.Dtos.JournalEntry",
         "IsRequired": true
       }
     ],
@@ -138,9 +138,9 @@
     "EndpointName": "CreateTransaction"
   },
   {
-    "ContainingType": "DEAT.WebAPI.Controllers.TransactionsController",
+    "ContainingType": "DEAT.WebAPI.Controllers.JournalController",
     "Method": "ApproveTransaction",
-    "RelativePath": "api/Transactions/{transactionId}/approve",
+    "RelativePath": "api/Journal/{transactionId}/approve",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -173,9 +173,9 @@
     ]
   },
   {
-    "ContainingType": "DEAT.WebAPI.Controllers.TransactionsController",
+    "ContainingType": "DEAT.WebAPI.Controllers.JournalController",
     "Method": "CancelTransaction",
-    "RelativePath": "api/Transactions/{transactionId}/cancel",
+    "RelativePath": "api/Journal/{transactionId}/cancel",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -208,9 +208,9 @@
     ]
   },
   {
-    "ContainingType": "DEAT.WebAPI.Controllers.TransactionsController",
+    "ContainingType": "DEAT.WebAPI.Controllers.JournalController",
     "Method": "ConfirmTransactionLeg",
-    "RelativePath": "api/Transactions/{transactionId}/legs/{transactionLegId}/confirm",
+    "RelativePath": "api/Journal/{transactionId}/legs/{transactionLegId}/confirm",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -248,9 +248,9 @@
     ]
   },
   {
-    "ContainingType": "DEAT.WebAPI.Controllers.TransactionsController",
+    "ContainingType": "DEAT.WebAPI.Controllers.JournalController",
     "Method": "RetryTransaction",
-    "RelativePath": "api/Transactions/{transactionId}/retry",
+    "RelativePath": "api/Journal/{transactionId}/retry",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -281,6 +281,27 @@
         "StatusCode": 404
       }
     ]
+  },
+  {
+    "ContainingType": "DEAT.WebAPI.Controllers.LedgerController",
+    "Method": "GetLegerEntries",
+    "RelativePath": "api/Ledger",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DEAT.Data.Models.Dtos.LedgerEntry, DEAT.Data.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetLegerEntries"
   },
   {
     "ContainingType": "DEAT.WebAPI.Controllers.WeatherForecastController",
