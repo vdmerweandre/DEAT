@@ -32,7 +32,7 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("c4371215-948f-4d2f-8097-9312c53f9f21"),
                             Amount = 100,
                             Category = "Assets",
-                            State = "",
+                            State = "Success",
                             Side = "Debit"
                         },
                         new JournalDetail
@@ -41,7 +41,7 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("7ccdffbd-c698-40e8-ba8b-09010beb0e85"),
                             Amount = 100,
                             Category = "Liabilities",
-                            State = "",
+                            State = "Success",
                             Side = "Debit"
                         },
                     }
@@ -66,7 +66,7 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("c4371215-948f-4d2f-8097-9312c53f9f21"),
                             Amount = 100,
                             Category = "Assets",
-                            State = "",
+                            State = "Success",
                             Side = "Debit"
                         },
                         new JournalDetail
@@ -75,7 +75,7 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("7ccdffbd-c698-40e8-ba8b-09010beb0e85"),
                             Amount = 98,
                             Category = "Liabilities",
-                            State = "",
+                            State = "Success",
                             Side = "Debit"
                         },
                         new JournalDetail
@@ -84,14 +84,14 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("c2953603-2622-433e-a96c-39aba8fab744"),
                             Amount = 2,
                             Category = "Income",
-                            State = "",
+                            State = "Success",
                             Side = "Debit"
                         },
                     }
                 });
             #endregion
 
-            #region Wrong - Deposit with fees + merchant fees
+            #region Deposit with fees + merchant fees
             id = Guid.Parse("3e87624f-6a42-41cd-ad69-12d270e153b6");
             _transactions.Add(id,
                 new JournalEntry
@@ -107,9 +107,9 @@ namespace DEAT.WebAPI.Services
                         {
                             TransactionLegId = Guid.Parse("57375d2d-9a0f-423f-944b-9a3b2336bbe9"),
                             AccountId = Guid.Parse("c4371215-948f-4d2f-8097-9312c53f9f21"),
-                            Amount = 100,
+                            Amount = 99,
                             Category = "Assets",
-                            State = "",
+                            State = "Success",
                             Side = "Debit"
                         },
                         new JournalDetail
@@ -118,7 +118,7 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("7ccdffbd-c698-40e8-ba8b-09010beb0e85"),
                             Amount = 98,
                             Category = "Liabilities",
-                            State = "",
+                            State = "Success",
                             Side = "Debit"
                         },
                         new JournalDetail
@@ -127,7 +127,7 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("c2953603-2622-433e-a96c-39aba8fab744"),
                             Amount = 2,
                             Category = "Income",
-                            State = "",
+                            State = "Success",
                             Side = "Debit"
                         },
                         new JournalDetail
@@ -136,27 +136,9 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("e10278dc-c66a-4c97-868b-2de6bf0bede2"),
                             Amount = 1,
                             Category = "Expenses",
-                            State = "",
+                            State = "Success",
                             Side = "Debit"
-                        },
-                        new JournalDetail
-                        {
-                            TransactionLegId = Guid.Parse("57cf92d8-b95e-4cd0-9900-a7b008956941"),
-                            AccountId = Guid.Parse("c2953603-2622-433e-a96c-39aba8fab744"),
-                            Amount = 1,
-                            Category = "Income",
-                            State = "",
-                            Side = "Credit"
-                        },
-                        new JournalDetail
-                        {
-                            TransactionLegId = Guid.Parse("8e3275fb-9ece-4be9-b108-4635b4bb6097"),
-                            AccountId = Guid.Parse("e10278dc-c66a-4c97-868b-2de6bf0bede2"),
-                            Amount = 1,
-                            Category = "Expenses",
-                            State = "",
-                            Side = "Credit"
-                        },
+                        }
                     }
                 });
             #endregion
@@ -179,7 +161,7 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("e10278dc-c66a-4c97-868b-2de6bf0bede2"),
                             Amount = 1,
                             Category = "Expenses",
-                            State = "",
+                            State = "Success",
                             Side = "Credit"
                         },
                         new JournalDetail
@@ -188,7 +170,68 @@ namespace DEAT.WebAPI.Services
                             AccountId = Guid.Parse("c2953603-2622-433e-a96c-39aba8fab744"),
                             Amount = 1,
                             Category = "Income",
-                            State = "",
+                            State = "Success",
+                            Side = "Credit"
+                        },
+                    }
+                });
+            #endregion
+
+            #region Withdrawal with fees
+            id = Guid.Parse("bb4ab8f6-6c11-4c10-b089-f27b4d9e36c7");
+            _transactions.Add(id,
+                new JournalEntry
+                {
+                    TransactionId = id,
+                    Reference = "Withdrawal with fees",
+                    State = "Success",
+                    Timestamp = DateTime.UtcNow,
+                    Version = 0,
+                    JournalDetails = new JournalDetail[]
+                    {
+                        new JournalDetail
+                        {
+                            TransactionLegId = Guid.Parse("6e80c523-d916-4d62-a340-15677c88d5ff"),
+                            AccountId = Guid.Parse("31beb218-f9be-44e0-bbd3-29448fe60d9a"),
+                            Amount = 100,
+                            Category = "Assets",
+                            State = "Success",
+                            Side = "Credit"
+                        },
+                        new JournalDetail
+                        {
+                            TransactionLegId = Guid.Parse("17f6f74f-3875-4a63-8e5f-b8e5fb9bc84a"),
+                            AccountId = Guid.Parse("7ccdffbd-c698-40e8-ba8b-09010beb0e85"),
+                            Amount = 100,
+                            Category = "Liabilities",
+                            State = "Success",
+                            Side = "Credit"
+                        },
+                        new JournalDetail
+                        {
+                            TransactionLegId = Guid.Parse("d5b16445-fe96-48f5-a75d-d42a41435b89"),
+                            AccountId = Guid.Parse("39941382-149e-4964-b725-ad66aa4325ad"),
+                            Amount = 10,
+                            Category = "Income",
+                            State = "Success",
+                            Side = "Debit"
+                        },
+                        new JournalDetail
+                        {
+                            TransactionLegId = Guid.Parse("485f2da6-8213-4e30-b2cf-e993749f4405"),
+                            AccountId = Guid.Parse("c4178afd-e32c-4fd9-8c4d-25e78c522a5c"),
+                            Amount = 5,
+                            Category = "Expenses",
+                            State = "Success",
+                            Side = "Debit"
+                        },
+                        new JournalDetail
+                        {
+                            TransactionLegId = Guid.Parse("c5f81ee7-2665-4bd0-9cac-08b8514eec32"),
+                            AccountId = Guid.Parse("39941382-149e-4964-b725-ad66aa4325ad"),
+                            Amount = 5,
+                            Category = "Income",
+                            State = "Success",
                             Side = "Credit"
                         },
                     }
