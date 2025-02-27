@@ -1,6 +1,6 @@
-# Double Entry Accounting and Treasury System (DEAT)
+# DEAT - Double Entry Accounting and Treasury System
 
-Simple proof of concept application to illustrate the usage of 2 different workflow technologies in [MassTransit with a saga state machine](https://masstransit.io/documentation/configuration/sagas/overview) and [Temporal](https://temporal.io/) in combination with a double entry accounting and treasury system.
+Simple proof of concept application to illustrate the usage of 2 different workflow technologies in [MassTransit with a saga state machine](https://masstransit.io/documentation/configuration/sagas/overview) and [Temporal](https://temporal.io/) in combination with a Double Entry Accounting and Treasury system.
 
 ## Overview
 ### Double Entry accounting
@@ -24,7 +24,8 @@ A **chart of accounts (COA)** include all accounts categorised by either
 In the poc, a default list of example accounts for each category were seeded, but more can be added.
 
 #### Journal entries
-A  business transaction (a journal entry) includes at least 1 x source and 1 x destination account and an amount such that the following equation always balances.
+A  business transaction (a journal entry) includes at least 1 x source and 1 x destination account and an amount such that the following equation always balances:
+
 `Assets (A) + Expenses (E) = Liabilities (L) + Equity (C) + Income (I)`
 
 * Debits represents money flowing into an account
