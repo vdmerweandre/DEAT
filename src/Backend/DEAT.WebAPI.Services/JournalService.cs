@@ -1,6 +1,8 @@
 ﻿using DEAT.Data.Models.Dtos;
 using DEAT.WebAPI.Services.Contracts;
+using DEAT.WebAPI.Services.Statemachine;
 using Microsoft.Extensions.Logging;
+using System.Transactions;
 
 namespace DEAT.WebAPI.Services
 {
@@ -244,7 +246,18 @@ namespace DEAT.WebAPI.Services
             return Task.FromResult(_transactions.Values.ToList());
         }
 
-        public async Task<Guid> CreateJournalEntryAsync(JournalEntry transaction)
+        public async Task<JournalEntry?> GetTransactionAsync(Guid transactionId)
+        {
+            if (!_transactions.ContainsKey(transactionId))
+            {
+                _logger.LogWarning($"Transaction does not exists {transactionId}");
+                return null;
+            }
+
+            return await Task.FromResult(_transactions[transactionId]);
+        }
+
+        public async Task<Guid> CreateJournalEntryAsync(Guid transactionId, JournalEntry transaction)
         {
             if (_transactions.ContainsKey(transaction.TransactionId)) 
             {
@@ -252,8 +265,8 @@ namespace DEAT.WebAPI.Services
                 return await Task.FromResult(transaction.TransactionId);
             }
 
-            // Generate a new Transaction Id
-            transaction.TransactionId = Guid.NewGuid();
+            transaction.TransactionId = transactionId;
+            transaction.State = "Created";
 
             _transactions.Add(transaction.TransactionId, transaction);
 
@@ -348,8 +361,14 @@ namespace DEAT.WebAPI.Services
                 _logger.LogWarning($"Transaction does not exists {transactionId}");
                 return await Task.FromResult(false);
             }
+            bool confirmed = _transactions[transactionId].JournalDetails.All(l => l.State == "Confirmed");
 
-            return await Task.FromResult(_transactions[transactionId].JournalDetails.All(l => l.State == "Confirmed"));
+            if (confirmed)
+            {
+                _transactions[transactionId].State = "Confirmed";
+            }
+            
+            return await Task.FromResult(confirmed);
         }
     }
 }

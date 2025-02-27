@@ -1,6 +1,4 @@
-﻿using DEAT.Data.Models.Dtos;
-using DEAT.WebAPI.Services.Contracts;
-using DEAT.WebAPI.Services.Statemachine.Observers;
+﻿using DEAT.WebAPI.Services.Contracts;
 using MassTransit;
 
 namespace DEAT.WebAPI.Services

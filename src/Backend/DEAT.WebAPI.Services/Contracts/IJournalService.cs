@@ -6,7 +6,8 @@ namespace DEAT.WebAPI.Services.Contracts
     public interface IJournalService
     {
         Task<List<JournalEntry>> GetJournalEntriesAsync();
-        Task<Guid> CreateJournalEntryAsync(JournalEntry transaction);
+        Task<JournalEntry?> GetTransactionAsync(Guid transactionId);
+        Task<Guid> CreateJournalEntryAsync(Guid transactionId, JournalEntry transaction);
         Task<Guid> UpdateJournalStateAsync(Guid transactionId, string state);
         Task<bool> ApproveTransactionAsync(Guid transactionId);
         Task<bool> CancelTransactionAsync(Guid transactionId);

@@ -1,9 +1,11 @@
 using DEAT.WebAPI.Services.Extensions;
+using DEAT.WebApi.TemporalServices.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDEATWebAPIServices(builder.Configuration);
+builder.Services.AddTemporalServices(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

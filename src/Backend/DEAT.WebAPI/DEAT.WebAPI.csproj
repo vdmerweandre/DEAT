@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DEAT.Data.Models\DEAT.Data.Models.csproj" />
     <ProjectReference Include="..\DEAT.WebAPI.Services\DEAT.WebAPI.Services.csproj" />
+    <ProjectReference Include="..\DEAT.WebApi.TemporalServices\DEAT.WebAPI.TemporalServices.csproj" />
   </ItemGroup>
 
 </Project>

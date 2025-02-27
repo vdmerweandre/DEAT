@@ -22,19 +22,6 @@ namespace DEAT.WebAPI.Services
             //Income: Money that a business earns
             //Expenses: Costs that a business incurs to generate revenue
 
-            //Withdrawal: Wallets (A) (debit) + Network Fees (E) (credit) = Account Payable (L) (credit) + Withdrawal Fees (I) (credit) + Buy-backs (L) (debit)
-            // -100 + 5 = 90 + 10 - 5
-            //settlement/buying back fees
-            // - = Bank (C) (debit) + Buy-backs (L) (credit)
-            // - = -5 + 5
-
-            //Deposit
-            //Wallets(A)(credit) = Account Payable(L)(debit) + Deposit Fees(I)(credit)
-            // 100 = -110 + 10
-
-            //OTC: - = Account Payable (L) (debit) + Account Recievable (I) (credit) + Commission(I) (credit)
-            // - = -100 + 90 + 10
-
             //seed accounts
             //Assets
             Guid id = Guid.Parse("c4371215-948f-4d2f-8097-9312c53f9f21");

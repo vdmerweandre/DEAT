@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{329E11C2-6F1B-4BE9-A8AE-147AF4DF6794}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEAT.WebAPI.TemporalServices", "src\Backend\DEAT.WebApi.TemporalServices\DEAT.WebAPI.TemporalServices.csproj", "{829684C8-6A47-467E-AF97-6E1D7845D393}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{486FFE20-8751-45CA-8C0D-18ADFE06EB0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{486FFE20-8751-45CA-8C0D-18ADFE06EB0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{486FFE20-8751-45CA-8C0D-18ADFE06EB0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{829684C8-6A47-467E-AF97-6E1D7845D393}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{829684C8-6A47-467E-AF97-6E1D7845D393}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{829684C8-6A47-467E-AF97-6E1D7845D393}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{829684C8-6A47-467E-AF97-6E1D7845D393}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,5 +70,6 @@ Global
 		{E0A01820-D08B-4E13-B655-7B7BC91D0628} = {3F1F356F-C123-4A0A-B22F-82AF03F959DA}
 		{E0013149-1D23-4F2B-84F1-4D238B36D90B} = {3F1F356F-C123-4A0A-B22F-82AF03F959DA}
 		{486FFE20-8751-45CA-8C0D-18ADFE06EB0A} = {3F1F356F-C123-4A0A-B22F-82AF03F959DA}
+		{829684C8-6A47-467E-AF97-6E1D7845D393} = {3F1F356F-C123-4A0A-B22F-82AF03F959DA}
 	EndGlobalSection
 EndGlobal

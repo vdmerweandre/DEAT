@@ -169,7 +169,7 @@
                                         <td>
                                             <button class="btn btn-success btn-sm" 
                                             @onclick="() => ConfirmTransactionLeg(transaction.TransactionId, leg.TransactionLegId)"
-                                                    disabled="@(GetTransactionState(transaction.TransactionId) !="Processed" )">
+                                                    disabled="@(GetTransactionState(transaction.TransactionId) != "Processed" )">
                                                 Confirm
                                             </button>
                                         </td>
