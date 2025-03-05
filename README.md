@@ -14,7 +14,7 @@ Double entry accounting system generally consists of
 #### Chart of Accounts
 In and double entry accounting system, all movements of funds are represented as debits or credits to accounts in, one of the categories in the Chart of Accounts list below. 
 
-A **chart of accounts (COA)** include all accounts categorised by either
+A **chart of accounts (COA)** includes all accounts categorised by either
 * Assets (A)
 * Expenses (E)
 * Liabilities (L)
@@ -32,7 +32,7 @@ A  business transaction (a journal entry) includes at least 1 x source and 1 x d
 * Credits represents money flowing out of an account
 
 #### General Ledger
-The General ledger is an append only account of all debits and credits to the accounts that form part of all the journal entries. It provides a read only account of what heppend during each leg of a journal entry and is often used to find irregularities or unespected balances in the accounts. 
+The General ledger is an append only account of all debits and credits to the accounts that form part of all the journal entries. It provides a read only account of what happend during each leg of a journal entry and is often used to find irregularities or unexpected balances in the accounts. 
 
 #
 ### Workflows
@@ -151,3 +151,7 @@ Both frameworks excel in specific scenarios, so the choice depends on your appli
 ### Referenecs
 * [hexquote.com](https://hexquote.com/build-accounting-application-using-net-core-angular-and-entity-framework/)
 * [Temporal Workflow Signals and Selectors](https://medium.com/lyonas/series-efficient-workflows-in-go-with-temporal-signals-selectors-ddd4bbc285d4#:~:text=Workflow%20Selectors%20in%20Temporal%20are,adaptability%20to%20the%20workflow%20execution.)
+* [Engineering-principles-and-best-practices](https://substack.wasteman.codes/p/engineering-principles-and-best-practices)
+* [Accounting-for-software-engineers](https://drew.thecsillags.com/posts/2017-12-06-accounting-for-software-engineers/)
+* [Accounting-for-developers](https://8291912.fs1.hubspotusercontent-na1.net/hubfs/8291912/Accounting%20For%20Developers.pdf)
+* [Accounting-for-computer-scientists](https://martin.kleppmann.com/2011/03/07/accounting-for-computer-scientists.htmls)
