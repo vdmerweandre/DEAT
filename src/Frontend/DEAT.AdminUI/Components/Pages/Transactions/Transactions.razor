@@ -27,15 +27,17 @@
         return transaction.State ?? "Unknown State";
     }
 
-    private string GetAccountName(Guid accountId)
+    private string GetAccountName(System.UInt128? accountId)
     {
-        var account = Accounts.FirstOrDefault(a => a.AccountId == accountId);
+        if (!accountId.HasValue) return "Unknown Account";
+        var account = Accounts.FirstOrDefault(a => a.AccountId.HasValue && a.AccountId.Value == accountId.Value);
         return account?.AccountName ?? "Unknown Account";
     }
 
-    private string GetAccountCategory(Guid accountId)
+    private string GetAccountCategory(System.UInt128? accountId)
     {
-        var account = Accounts.FirstOrDefault(a => a.AccountId == accountId);
+        if (!accountId.HasValue) return "Unknown Category";
+        var account = Accounts.FirstOrDefault(a => a.AccountId.HasValue && a.AccountId.Value == accountId.Value);
         return account?.Category ?? "Unknown Category";
     }
 

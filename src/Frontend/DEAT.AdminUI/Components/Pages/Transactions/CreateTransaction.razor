@@ -8,7 +8,6 @@
 <PageTitle>Create Journal Entry</PageTitle>
 
 @code {
-
     private JournalEntry NewTransaction = new();
     private IEnumerable<Account> Accounts = new List<Account>();
 
@@ -20,15 +19,15 @@
     private async Task SubmitTransaction()
     {
         var transactionId = await TransactionService.CreateTransactionAsync(NewTransaction);
-
         NewTransaction = new();
     }
 
     private void UpdateAccountAndCategory(JournalDetail leg, string selectedAccountId)
     {
         // Find the selected account
-        var account = Accounts.FirstOrDefault(a => a.AccountId == Guid.Parse(selectedAccountId));
-        if (account != null)
+        var parsedId = System.UInt128.Parse(selectedAccountId);
+        var account = Accounts.FirstOrDefault(a => a.AccountId.HasValue && a.AccountId.Value == parsedId);
+        if (account != null && account.AccountId.HasValue)
         {
             leg.AccountId = account.AccountId;
             leg.Category = account.Category; // Populate the Category field automatically
@@ -41,8 +40,8 @@
         newLegs.Add(new JournalDetail
             {
                 TransactionLegId = Guid.NewGuid(),
-                AccountId = Guid.Empty,
-                Amount = 0,
+                AccountId = null,
+                Amount = null,
                 Side = "Debit",
                 State = string.Empty
             });

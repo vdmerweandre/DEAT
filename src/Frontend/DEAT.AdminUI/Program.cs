@@ -1,5 +1,6 @@
 using DEAT.AdminUI.Components;
 using DEAT.AdminUI.Services.Extensions;
+using BlazorBootstrap;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddBlazorBootstrap();
 builder.Services.AddAdminUIServices(builder.Configuration);
 
 var app = builder.Build();

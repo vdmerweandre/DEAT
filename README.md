@@ -12,7 +12,7 @@ Double entry accounting system generally consists of
 * General append only Ledger showing each of the debits and credits 
 
 #### Chart of Accounts
-In and double entry accounting system, all movements of funds are represented as debits or credits to accounts in, one of the categories in the Chart of Accounts list below. 
+In a double entry accounting system, all movements of funds are represented as debits or credits to accounts in, one of the categories in the Chart of Accounts list below. 
 
 A **chart of accounts (COA)** includes all accounts categorised by either
 * Assets (A)
@@ -32,7 +32,7 @@ A  business transaction (a journal entry) includes at least 1 x source and 1 x d
 * Credits represents money flowing out of an account
 
 #### General Ledger
-The General ledger is an append only account of all debits and credits to the accounts that form part of all the journal entries. It provides a read only account of what happend during each leg of a journal entry and is often used to find irregularities or unexpected balances in the accounts. 
+The General ledger is an append only account of all debits and credits to the accounts that form part of all the journal entries. It provides a read only account of what happened during each leg of a journal entry and is often used to find irregularities or unexpected balances in the accounts. 
 
 #
 ### Workflows
@@ -154,4 +154,4 @@ Both frameworks excel in specific scenarios, so the choice depends on your appli
 * [Engineering-principles-and-best-practices](https://substack.wasteman.codes/p/engineering-principles-and-best-practices)
 * [Accounting-for-software-engineers](https://drew.thecsillags.com/posts/2017-12-06-accounting-for-software-engineers/)
 * [Accounting-for-developers](https://8291912.fs1.hubspotusercontent-na1.net/hubfs/8291912/Accounting%20For%20Developers.pdf)
-* [Accounting-for-computer-scientists](https://martin.kleppmann.com/2011/03/07/accounting-for-computer-scientists.htmls)
+* [Accounting-for-computer-scientists](https://martin.kleppmann.com/2011/03/07/accounting-for-computer-scientists.html)

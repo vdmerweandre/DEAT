@@ -20,5 +20,4 @@ namespace DEAT.WebAPI.Services.Consumers
             await context.Publish(new TransactionProcessed(context.Message.TransactionId));
         }
     }
-
 }

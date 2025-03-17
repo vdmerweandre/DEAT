@@ -2,23 +2,28 @@
 using DEAT.WebApi.TemporalServices.Contract;
 using DEAT.WebApi.TemporalServices.Models;
 using DEAT.WebAPI.Services.Contracts;
+using DEAT.WebAPI.TigerBeetleServices;
 using Temporalio.Activities;
+using Microsoft.Extensions.Logging;
 
 namespace DEAT.WebApi.TemporalServices.Activities
 {
     public class JournalActivities: IJournalActivities
     {
+        private readonly ILogger<JournalActivities> _logger;
         private readonly IJournalService _journalService;
-        private readonly IAccountService _accountService;
+        private readonly DEAT.WebAPI.TigerBeetleServices.IAccountService _accountService;
         private readonly ILedgerService _ledgerService;
         private TemporalClientService _temporalClientService;
 
         public JournalActivities(
+            ILogger<JournalActivities> logger,
             IJournalService transactionService,
-            IAccountService accountService,
+            DEAT.WebAPI.TigerBeetleServices.IAccountService accountService,
             ILedgerService ledgerService,
             TemporalClientService temporalClientService)
         {
+            _logger = logger;
             _journalService = transactionService;
             _ledgerService = ledgerService; 
             _accountService = accountService;   
@@ -69,22 +74,39 @@ namespace DEAT.WebApi.TemporalServices.Activities
         [Activity]
         public async Task CreditAccountAsync(Guid TransactionId, JournalDetail JournalDetail)
         {
-            var success = await _accountService.CreditAccountAsync(JournalDetail.AccountId, JournalDetail.Amount);
-
-            if (success)
+            try
             {
-                await _ledgerService.AppendAsync(new LedgerEntry
+                if (!JournalDetail.AccountId.HasValue || !JournalDetail.Amount.HasValue)
                 {
-                    TransactionId = TransactionId,
-                    TransactionLegId = JournalDetail.TransactionLegId,
-                    Amount = JournalDetail.Amount,
-                    AccountId = JournalDetail.AccountId,
-                    Side = "Credit",
-                    Timestamp = DateTime.UtcNow
-                });
+                    _logger.LogError("AccountId or Amount is null for transaction {TransactionId}", TransactionId);
+                    await _temporalClientService.SendWfSignalAsync(TransactionId, wf => wf.TransactionFailed(TransactionId));
+                    return;
+                }
+
+                _logger.LogInformation("Crediting account {AccountId} with amount {Amount}", JournalDetail.AccountId, JournalDetail.Amount);
+
+                var success = await _accountService.CreditAccountAsync(JournalDetail.AccountId, JournalDetail.Amount);
+
+                if (success)
+                {
+                    await _ledgerService.AppendAsync(new LedgerEntry
+                    {
+                        TransactionId = TransactionId,
+                        TransactionLegId = JournalDetail.TransactionLegId,
+                        Amount = JournalDetail.Amount,
+                        AccountId = JournalDetail.AccountId,
+                        Side = "Credit",
+                        Timestamp = DateTime.UtcNow
+                    });
+                }
+                else
+                {
+                    await _temporalClientService.SendWfSignalAsync(TransactionId, wf => wf.TransactionFailed(TransactionId));
+                }
             }
-            else
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error crediting account {AccountId}", JournalDetail.AccountId);
                 await _temporalClientService.SendWfSignalAsync(TransactionId, wf => wf.TransactionFailed(TransactionId));
             }
         }
@@ -92,22 +114,39 @@ namespace DEAT.WebApi.TemporalServices.Activities
         [Activity]
         public async Task DebitAccountAsync(Guid TransactionId, JournalDetail JournalDetail)
         {
-            var success = await _accountService.DebitAccountAsync(JournalDetail.AccountId, JournalDetail.Amount);
-
-            if (success)
+            try
             {
-                await _ledgerService.AppendAsync(new LedgerEntry
+                if (!JournalDetail.AccountId.HasValue || !JournalDetail.Amount.HasValue)
                 {
-                    TransactionId = TransactionId,
-                    TransactionLegId = JournalDetail.TransactionLegId,
-                    Amount = JournalDetail.Amount,
-                    AccountId = JournalDetail.AccountId,
-                    Side = "Debit",
-                    Timestamp = DateTime.UtcNow
-                });
+                    _logger.LogError("AccountId or Amount is null for transaction {TransactionId}", TransactionId);
+                    await _temporalClientService.SendWfSignalAsync(TransactionId, wf => wf.TransactionFailed(TransactionId));
+                    return;
+                }
+
+                _logger.LogInformation("Debiting account {AccountId} with amount {Amount}", JournalDetail.AccountId, JournalDetail.Amount);
+
+                var success = await _accountService.DebitAccountAsync(JournalDetail.AccountId, JournalDetail.Amount);
+
+                if (success)
+                {
+                    await _ledgerService.AppendAsync(new LedgerEntry
+                    {
+                        TransactionId = TransactionId,
+                        TransactionLegId = JournalDetail.TransactionLegId,
+                        Amount = JournalDetail.Amount,
+                        AccountId = JournalDetail.AccountId,
+                        Side = "Debit",
+                        Timestamp = DateTime.UtcNow
+                    });
+                }
+                else
+                {
+                    await _temporalClientService.SendWfSignalAsync(TransactionId, wf => wf.TransactionFailed(TransactionId));
+                }
             }
-            else
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error debiting account {AccountId}", JournalDetail.AccountId);
                 await _temporalClientService.SendWfSignalAsync(TransactionId, wf => wf.TransactionFailed(TransactionId));
             }
         }
@@ -115,14 +154,19 @@ namespace DEAT.WebApi.TemporalServices.Activities
         [Activity]
         public async Task ProcessTransactionAsync(Guid TransactionId)
         {
-            JournalEntry transaction = await _journalService.GetTransactionAsync(TransactionId);
+            var transaction = await _journalService.GetTransactionAsync(TransactionId);
+            if (transaction == null)
+            {
+                _logger.LogError("Transaction not found: {TransactionId}", TransactionId);
+                return;
+            }
 
-            foreach (var entry in transaction.JournalDetails.Where(j => j.Side == "Debit"))
+            foreach (var entry in transaction.JournalDetails.Where(j => j.Side == "Debit" && j.AccountId.HasValue && j.Amount.HasValue))
             {
                 await _temporalClientService.SendWfSignalAsync(TransactionId, wf => wf.DebitAccountAsync(TransactionId, entry));
             }
 
-            foreach (var entry in transaction.JournalDetails.Where(j => j.Side == "Credit"))
+            foreach (var entry in transaction.JournalDetails.Where(j => j.Side == "Credit" && j.AccountId.HasValue && j.Amount.HasValue))
             {
                 await _temporalClientService.SendWfSignalAsync(TransactionId, wf => wf.CreditAccountAsync(TransactionId, entry));
             }
@@ -135,6 +179,16 @@ namespace DEAT.WebApi.TemporalServices.Activities
         public async Task UpdateTransactionStatusAsync(Guid transactionId, State state)
         {
             await _journalService.UpdateJournalStateAsync(transactionId, state.ToString());
+        }
+
+        public async Task<JournalEntry> GetJournalEntryAsync(Guid transactionId)
+        {
+            var journalEntry = await _journalService.GetTransactionAsync(transactionId);
+
+            if (journalEntry == null)
+                throw new ArgumentException($"Journal entry not found for transaction {transactionId}");
+
+            return journalEntry;
         }
     }
 }

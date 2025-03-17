@@ -3,8 +3,8 @@
     public class JournalDetail
     {
         public Guid TransactionLegId { get; set; }
-        public Guid AccountId { get; set; }
-        public decimal Amount { get; set; }
+        public System.UInt128? AccountId { get; set; }
+        public System.UInt128? Amount { get; set; }
         public string? State { get; set; }
         public string? Side { get; set; }
         public string? Category { get; set; }
@@ -15,18 +15,43 @@
         public Guid TransactionId { get; set; }
         public string? Reference { get; set; }
         public JournalDetail[] JournalDetails { get; set; } = new JournalDetail[0];
-        public decimal NetBalance =>
-            (JournalDetails.Where(l => l.Category == "Liabilities" && l.Side == "Debit").Sum(l => l.Amount) - JournalDetails.Where(l => l.Category == "Liabilities" && l.Side == "Credit").Sum(l => l.Amount)) +
-            (JournalDetails.Where(l => l.Category == "Income" && l.Side == "Debit").Sum(l => l.Amount) - JournalDetails.Where(l => l.Category == "Income" && l.Side == "Credit").Sum(l => l.Amount)) +
-            (JournalDetails.Where(l => l.Category == "Equity" && l.Side == "Debit").Sum(l => l.Amount) - JournalDetails.Where(l => l.Category == "Equity" && l.Side == "Credit").Sum(l => l.Amount)) -
-            (JournalDetails.Where(l => l.Category == "Assets" && l.Side == "Debit").Sum(l => l.Amount) - JournalDetails.Where(l => l.Category == "Assets" && l.Side == "Credit").Sum(l => l.Amount)) -
-            (JournalDetails.Where(l => l.Category == "Expenses" && l.Side == "Debit").Sum(l => l.Amount) - JournalDetails.Where(l => l.Category == "Expenses" && l.Side == "Credit").Sum(l => l.Amount));
+        public System.UInt128 NetBalance
+        {
+            get
+            {
+                System.UInt128 liabilitiesBalance = SumByCategory("Liabilities");
+                System.UInt128 incomeBalance = SumByCategory("Income");
+                System.UInt128 equityBalance = SumByCategory("Equity");
+                System.UInt128 assetsBalance = SumByCategory("Assets");
+                System.UInt128 expensesBalance = SumByCategory("Expenses");
 
-        public decimal DebitAmount => JournalDetails.Where(l => l.Side == "Debit").Sum(l => l.Amount);
-        public decimal CreditAmount => JournalDetails.Where(l => l.Side == "Credit").Sum(l => l.Amount);
+                return liabilitiesBalance + incomeBalance + equityBalance - assetsBalance - expensesBalance;
+            }
+        }
+
+        private System.UInt128 SumByCategory(string category)
+        {
+            var debits = JournalDetails
+                .Where(l => l.Category == category && l.Side == "Debit" && l.Amount.HasValue)
+                .Aggregate(System.UInt128.Zero, (acc, l) => acc + l.Amount.Value);
+
+            var credits = JournalDetails
+                .Where(l => l.Category == category && l.Side == "Credit" && l.Amount.HasValue)
+                .Aggregate(System.UInt128.Zero, (acc, l) => acc + l.Amount.Value);
+
+            return debits - credits;
+        }
+
+        public System.UInt128 DebitAmount => JournalDetails
+            .Where(l => l.Side == "Debit" && l.Amount.HasValue)
+            .Aggregate(System.UInt128.Zero, (acc, l) => acc + l.Amount.Value);
+
+        public System.UInt128 CreditAmount => JournalDetails
+            .Where(l => l.Side == "Credit" && l.Amount.HasValue)
+            .Aggregate(System.UInt128.Zero, (acc, l) => acc + l.Amount.Value);
+
         public string? State { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
         public int Version { get; set; }
     }
-
 }
