@@ -50,4 +50,4 @@ public class ConcurrentHashSet<T> : ICollection<T> where T : notnull
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-} 
+}

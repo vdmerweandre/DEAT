@@ -83,7 +83,7 @@ public class AccountMapperTests
         // Arrange
         var accountId = new UInt128(1, 0);
         var accountName = "Test Account";
-        
+
         // Create a TigerBeetle account
         var tbAccount = new TbAccount
         {
@@ -98,7 +98,7 @@ public class AccountMapperTests
         Assert.Equal(accountId, result.AccountId);
         Assert.Equal("Assets", result.Category);
         Assert.Equal(accountName, result.AccountName);
-        
+
         // We can't test Debit and Credit values since they're read-only
         // and we can't set them in the test
     }
@@ -145,4 +145,4 @@ public class AccountMapperTests
         // Assert
         Assert.Equal(expectedFlags, tbAccount.Flags);
     }
-} 
+}

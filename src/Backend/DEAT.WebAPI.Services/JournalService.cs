@@ -259,7 +259,7 @@ namespace DEAT.WebAPI.Services
 
         public async Task<Guid> CreateJournalEntryAsync(Guid transactionId, JournalEntry transaction)
         {
-            if (_transactions.ContainsKey(transaction.TransactionId)) 
+            if (_transactions.ContainsKey(transaction.TransactionId))
             {
                 _logger.LogWarning($"Transaction already creates {transaction.TransactionId}");
                 return await Task.FromResult(transaction.TransactionId);
@@ -367,7 +367,7 @@ namespace DEAT.WebAPI.Services
             {
                 _transactions[transactionId].State = "Confirmed";
             }
-            
+
             return await Task.FromResult(confirmed);
         }
     }

@@ -45,16 +45,16 @@ public class AccountServiceTests
         Assert.Equal(accountDto.AccountName, result.AccountName);
         Assert.Equal(accountDto.Category, result.Category);
         Assert.True(result.AccountId.HasValue);
-        
+
         _mockClient.Verify(c => c.CreateAccountsAsync(
-            It.Is<TbAccount[]>(accounts => 
-                accounts.Length == 1 && 
+            It.Is<TbAccount[]>(accounts =>
+                accounts.Length == 1 &&
                 accounts[0].Code == 1)), // Assets category code
             Times.Once);
-            
+
         _mockRegistry.Verify(r => r.AddAccount(
-            It.IsAny<UInt128>(), 
-            It.Is<string>(name => name == accountDto.AccountName)), 
+            It.IsAny<UInt128>(),
+            It.Is<string>(name => name == accountDto.AccountName)),
             Times.Once);
     }
 
@@ -85,19 +85,19 @@ public class AccountServiceTests
     {
         // Arrange
         var accountId = new UInt128(1, 0);
-        var tbAccount = new TbAccount 
-        { 
+        var tbAccount = new TbAccount
+        {
             Id = accountId,
             Code = 1 // Assets
         };
 
         _mockRegistry.Setup(r => r.GetAllAccountIds())
             .Returns(new[] { accountId });
-            
+
         _mockRegistry.Setup(r => r.GetAccountName(accountId))
             .Returns("Test Account");
 
-        _mockClient.Setup(c => c.LookupAccountsAsync(It.Is<UInt128[]>(ids => 
+        _mockClient.Setup(c => c.LookupAccountsAsync(It.Is<UInt128[]>(ids =>
             ids.Contains(accountId))))
             .ReturnsAsync(new[] { tbAccount });
 
@@ -116,8 +116,8 @@ public class AccountServiceTests
     {
         // Arrange
         var accountId = new UInt128(1, 0);
-        var tbAccount = new TbAccount 
-        { 
+        var tbAccount = new TbAccount
+        {
             Id = accountId,
             Code = 1 // Assets
         };
@@ -201,4 +201,4 @@ public class AccountServiceTests
                 transfers[0].Amount == amount)),
             Times.Once);
     }
-} 
+}

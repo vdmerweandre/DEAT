@@ -15,7 +15,8 @@ namespace DEAT.WebAPI.Services
 
             //seed ledger
             #region Simple deposit
-            _ledger.Add(new LedgerEntry { 
+            _ledger.Add(new LedgerEntry
+            {
                 TransactionId = Guid.Parse("5b0b940d-8f36-4eee-b57c-267fe737fe13"),
                 TransactionLegId = Guid.Parse("f96fa900-a4c6-4bf5-91a9-92eb6564fd87"),
                 AccountId = System.UInt128.Parse("100"),

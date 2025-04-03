@@ -7,13 +7,13 @@ using static MassTransit.MessageHeaders;
 
 namespace DEAT.WebAPI.Services
 {
-    public class AccountService: IAccountService
+    public class AccountService : IAccountService
     {
         private readonly ILogger<AccountService> _logger;
         private readonly Dictionary<System.UInt128, Account> _accounts = new();
 
         public AccountService(ILogger<AccountService> logger)
-        { 
+        {
             _logger = logger;
 
             //seed accounts
@@ -87,7 +87,7 @@ namespace DEAT.WebAPI.Services
 
             var account = _accounts[accountId.Value];
             var currentBalance = account.Balance ?? 0;
-            
+
             if (currentBalance < amount.Value)
                 return Task.FromResult(false);
 

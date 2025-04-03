@@ -54,4 +54,4 @@ public class AccountRegistry : IAccountRegistry
     {
         return new Dictionary<UInt128, string>(_accountNames);
     }
-} 
+}

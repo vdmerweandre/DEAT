@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DEAT.WebApi.TemporalServices.Activities
 {
-    public class JournalActivities: IJournalActivities
+    public class JournalActivities : IJournalActivities
     {
         private readonly ILogger<JournalActivities> _logger;
         private readonly IJournalService _journalService;
@@ -25,8 +25,8 @@ namespace DEAT.WebApi.TemporalServices.Activities
         {
             _logger = logger;
             _journalService = transactionService;
-            _ledgerService = ledgerService; 
-            _accountService = accountService;   
+            _ledgerService = ledgerService;
+            _accountService = accountService;
             _temporalClientService = temporalClientService;
         }
 

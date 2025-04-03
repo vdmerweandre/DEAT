@@ -43,4 +43,4 @@ public static class AccountDefinitions
             Code = code
         };
     }
-} 
+}

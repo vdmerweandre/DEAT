@@ -11,4 +11,4 @@ public class AccountAlreadyExistsException : Exception
     public AccountAlreadyExistsException(string message, Exception innerException) : base(message, innerException)
     {
     }
-} 
+}

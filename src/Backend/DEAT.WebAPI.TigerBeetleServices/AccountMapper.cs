@@ -63,14 +63,14 @@ public static class AccountMapper
         using var sha256 = SHA256.Create();
         var input = $"{category}:{accountName}";
         var hash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(input));
-        
+
         // Take the first 16 bytes for UInt128
         var bytes = new byte[16];
         Array.Copy(hash, bytes, 16);
-        
+
         // Ensure the first byte matches the category code for easy identification
         bytes[0] = (byte)CategoryCodes.GetValueOrDefault(category, (UInt16)0);
-        
+
         return new UInt128(BitConverter.ToUInt64(bytes, 8), BitConverter.ToUInt64(bytes, 0));
     }
 
@@ -105,4 +105,4 @@ public static class AccountMapper
     {
         return CategoryCodes.FirstOrDefault(x => x.Value == code).Key ?? "Unknown";
     }
-} 
+}

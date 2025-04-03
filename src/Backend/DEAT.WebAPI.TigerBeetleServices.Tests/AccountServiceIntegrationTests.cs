@@ -15,7 +15,7 @@ public class AccountServiceIntegrationTests : IDisposable
     {
         // Setup dependency injection
         var services = new ServiceCollection();
-        
+
         // Add logging
         services.AddLogging(builder => builder.AddConsole());
 
@@ -72,4 +72,4 @@ public class AccountServiceIntegrationTests : IDisposable
     {
         _serviceProvider?.Dispose();
     }
-} 
+}

@@ -51,7 +51,7 @@ namespace DEAT.AdminUI.Services
 
                 response.EnsureSuccessStatusCode();
 
-                var id =  await response.Content.ReadFromJsonAsync<Guid>();
+                var id = await response.Content.ReadFromJsonAsync<Guid>();
 
                 return id;
             }

@@ -14,6 +14,34 @@ namespace DEAT.AdminUI.Services
 
         public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
+            return new List<Account>()
+            {
+                new Account()
+                {
+                    AccountId = 1001,
+                    AccountName = "BTC - Hot wallet",
+                    Category = "Asset",
+                    Credit = 8000,
+                    Debit = 10000
+                },
+                new Account()
+                {
+                    AccountId = 1001,
+                    AccountName = "BTC - Warm wallet",
+                    Category = "Asset",
+                    Credit = 1000,
+                    Debit = 2000000
+                },
+                new Account()
+                {
+                    AccountId = 1001,
+                    AccountName = "BTC - Network Fee",
+                    Category = "Expenses",
+                    Credit = 0,
+                    Debit = 2
+                }
+            };
+            
             // Create the client
             using HttpClient client = httpClientFactory.CreateClient("WebApi");
 
