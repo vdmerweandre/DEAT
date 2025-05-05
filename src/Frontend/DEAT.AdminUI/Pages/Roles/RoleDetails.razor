@@ -1,0 +1,114 @@
+@page "/roles/{Id:int}"
+@using DEAT.AdminUI.Services.Contracts
+@using DEAT.Data.Models.Dtos
+@using Microsoft.AspNetCore.Authorization
+@using DEAT.AdminUI.Services
+@attribute [Authorize(Policy = "Permission.Roles.View")]
+@inject IRoleService RoleService
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+
+<PageTitle>Role Details</PageTitle>
+
+<div class="container-fluid">
+    @if (_role == null)
+    {
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Role Details</h1>
+            <div class="btn-group">
+                <button class="btn btn-warning" @onclick="() => NavigationManager.NavigateTo($"/roles/edit/{Id}")">
+                    <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button class="btn btn-secondary" @onclick="() => NavigationManager.NavigateTo("/roles")">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </button>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Basic Information</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-2">Name</dt>
+                    <dd class="col-sm-10">@_role.Name</dd>
+
+                    <dt class="col-sm-2">Description</dt>
+                    <dd class="col-sm-10">@(_role.Description ?? "No description")</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Permissions</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Resource</th>
+                                <th>Permissions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var permission in _role.Permissions)
+                            {
+                                <tr>
+                                    <td>@permission.Resource</td>
+                                    <td>
+                                        @foreach (Permissions p in Enum.GetValues(typeof(Permissions)))
+                                        {
+                                            if (p != Permissions.None && p != Permissions.All)
+                                            {
+                                                if ((permission.PermissionValue & (int)p) == (int)p)
+                                                {
+                                                    <span class="badge bg-primary me-1">@p</span>
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private RoleDto? _role;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _role = await RoleService.GetRoleAsync(Id);
+            if (_role == null)
+            {
+                NotificationService.ShowError("Role not found");
+                NavigationManager.NavigateTo("/roles");
+            }
+        }
+        catch (Exception ex)
+        {
+            NotificationService.ShowError($"Failed to load role: {ex.Message}");
+            NavigationManager.NavigateTo("/roles");
+        }
+    }
+} 

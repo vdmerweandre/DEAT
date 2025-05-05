@@ -1,0 +1,66 @@
+@using DEAT.AdminUI.Services
+@inject NotificationService NotificationService
+@implements IDisposable
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    @if (_show)
+    {
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header @GetHeaderClass()">
+                <strong class="me-auto">@_title</strong>
+                <button type="button" class="btn-close" @onclick="Hide"></button>
+            </div>
+            <div class="toast-body">
+                @_message
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool _show;
+    private string _message = string.Empty;
+    private string _title = string.Empty;
+    private NotificationType _type;
+    private Timer? _timer;
+
+    protected override void OnInitialized()
+    {
+        NotificationService.OnShow += ShowNotification;
+        NotificationService.OnHide += Hide;
+    }
+
+    private void ShowNotification(string message, string title, NotificationType type)
+    {
+        _message = message;
+        _title = title;
+        _type = type;
+        _show = true;
+        StateHasChanged();
+
+        _timer?.Dispose();
+        _timer = new Timer(_ => Hide(), null, 5000, Timeout.Infinite);
+    }
+
+    private void Hide()
+    {
+        _show = false;
+        StateHasChanged();
+    }
+
+    private string GetHeaderClass() => _type switch
+    {
+        NotificationType.Success => "bg-success text-white",
+        NotificationType.Error => "bg-danger text-white",
+        NotificationType.Warning => "bg-warning",
+        NotificationType.Info => "bg-info text-white",
+        _ => string.Empty
+    };
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+        NotificationService.OnShow -= ShowNotification;
+        NotificationService.OnHide -= Hide;
+    }
+} 

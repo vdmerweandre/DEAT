@@ -1,0 +1,39 @@
+@page "/login"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+<PageTitle>Login</PageTitle>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Login</h3>
+                    <p class="text-center">Please sign in to access the application.</p>
+                    <div class="d-grid gap-2">
+                        <RemoteAuthenticatorView Action="@Action">
+                            <LoggingIn>
+                                <p>Logging in...</p>
+                            </LoggingIn>
+                            <CompletingLoggingIn>
+                                <p>Completing login...</p>
+                            </CompletingLoggingIn>
+                            <LogInFailed>
+                                <p>Login failed. Please try again.</p>
+                                <ExceptionDetails />
+                            </LogInFailed>
+                            <LogOutSucceeded>
+                                <p>You have been logged out.</p>
+                            </LogOutSucceeded>
+                        </RemoteAuthenticatorView>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? Action { get; set; }
+} 

@@ -1,0 +1,58 @@
+@if (_show)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Title</h5>
+                    <button type="button" class="btn-close" @onclick="OnCancel"></button>
+                </div>
+                <div class="modal-body">
+                    @Message
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancel</button>
+                    <button type="button" class="btn btn-danger" @onclick="OnConfirm">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    [Parameter]
+    public bool Show { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "Confirm Action";
+
+    [Parameter]
+    public string Message { get; set; } = "Are you sure you want to perform this action?";
+
+    [Parameter]
+    public EventCallback<bool> ShowChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnConfirm { get; set; }
+
+    private bool _show;
+
+    protected override void OnParametersSet()
+    {
+        _show = Show;
+    }
+
+    private async Task OnCancel()
+    {
+        _show = false;
+        await ShowChanged.InvokeAsync(false);
+    }
+
+    private async Task OnConfirm()
+    {
+        await OnConfirm.InvokeAsync();
+        _show = false;
+        await ShowChanged.InvokeAsync(false);
+    }
+} 

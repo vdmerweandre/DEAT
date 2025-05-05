@@ -1,0 +1,127 @@
+@page "/roles"
+@using DEAT.AdminUI.Services.Contracts
+@using DEAT.Data.Models.Dtos
+@using Microsoft.AspNetCore.Authorization
+@using DEAT.AdminUI.Services
+@attribute [Authorize(Policy = "Permission.Roles.View")]
+@inject IRoleService RoleService
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+
+<PageTitle>Roles</PageTitle>
+
+<div class="container-fluid">
+    <h1>Roles</h1>
+
+    @if (_roles == null)
+    {
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Role List</h5>
+                <button class="btn btn-primary" @onclick="() => NavigationManager.NavigateTo("/roles/create")">
+                    <i class="bi bi-plus"></i> Create Role
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Permissions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var role in _roles)
+                            {
+                                <tr>
+                                    <td>@role.Name</td>
+                                    <td>@role.Description</td>
+                                    <td>@role.Permissions.Count</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-info" @onclick="() => NavigationManager.NavigateTo($"/roles/{role.Id}")">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-warning" @onclick="() => NavigationManager.NavigateTo($"/roles/edit/{role.Id}")">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" @onclick="() => ShowDeleteConfirmation(role)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<ConfirmationDialog @bind-Show="_showDeleteConfirmation"
+                   Title="Delete Role"
+                   Message="Are you sure you want to delete this role? This action cannot be undone."
+                   OnConfirm="DeleteRole" />
+
+@code {
+    private IEnumerable<RoleDto>? _roles;
+    private bool _showDeleteConfirmation;
+    private RoleDto? _roleToDelete;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadRoles();
+    }
+
+    private async Task LoadRoles()
+    {
+        try
+        {
+            _roles = await RoleService.GetRolesAsync();
+        }
+        catch (Exception ex)
+        {
+            NotificationService.ShowError($"Failed to load roles: {ex.Message}");
+        }
+    }
+
+    private void ShowDeleteConfirmation(RoleDto role)
+    {
+        _roleToDelete = role;
+        _showDeleteConfirmation = true;
+    }
+
+    private async Task DeleteRole()
+    {
+        if (_roleToDelete == null) return;
+
+        try
+        {
+            await RoleService.DeleteRoleAsync(_roleToDelete.Id);
+            await LoadRoles();
+            NotificationService.ShowSuccess($"Role '{_roleToDelete.Name}' has been deleted successfully.");
+        }
+        catch (Exception ex)
+        {
+            NotificationService.ShowError($"Failed to delete role: {ex.Message}");
+        }
+        finally
+        {
+            _roleToDelete = null;
+        }
+    }
+} 
+} 

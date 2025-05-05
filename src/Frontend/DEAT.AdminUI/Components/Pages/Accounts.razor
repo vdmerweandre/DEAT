@@ -1,0 +1,85 @@
+@page "/accounts"
+@using DEAT.AdminUI.Services.Auth
+@attribute [Authorize(Policy = "Permission.Accounts.View")]
+
+<PageTitle>Accounts</PageTitle>
+
+<h1>Accounts</h1>
+
+<AuthorizeView Policy="Permission.Accounts.Create">
+    <Authorized>
+        <button class="btn btn-primary mb-3" @onclick="CreateAccount">
+            <span class="bi bi-plus-circle"></span> Create Account
+        </button>
+    </Authorized>
+</AuthorizeView>
+
+@if (accounts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Balance</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var account in accounts)
+            {
+                <tr>
+                    <td>@account.AccountId</td>
+                    <td>@account.AccountName</td>
+                    <td>@account.Category</td>
+                    <td>@account.Balance</td>
+                    <td>
+                        <AuthorizeView Policy="Permission.Accounts.Update">
+                            <Authorized>
+                                <button class="btn btn-sm btn-primary me-2" @onclick="() => EditAccount(account)">
+                                    <span class="bi bi-pencil"></span>
+                                </button>
+                            </Authorized>
+                        </AuthorizeView>
+                        <AuthorizeView Policy="Permission.Accounts.Delete">
+                            <Authorized>
+                                <button class="btn btn-sm btn-danger" @onclick="() => DeleteAccount(account)">
+                                    <span class="bi bi-trash"></span>
+                                </button>
+                            </Authorized>
+                        </AuthorizeView>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Account>? accounts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load accounts
+    }
+
+    private void CreateAccount()
+    {
+        // Create account logic
+    }
+
+    private void EditAccount(Account account)
+    {
+        // Edit account logic
+    }
+
+    private void DeleteAccount(Account account)
+    {
+        // Delete account logic
+    }
+} 

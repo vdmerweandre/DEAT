@@ -1,0 +1,190 @@
+@page "/roles/create"
+@page "/roles/edit/{Id:int}"
+@using DEAT.AdminUI.Services.Contracts
+@using DEAT.Data.Models.Dtos
+@using Microsoft.AspNetCore.Authorization
+@using DEAT.AdminUI.Services
+@attribute [Authorize(Policy = "Permission.Roles.Manage")]
+@inject IRoleService RoleService
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+
+<PageTitle>@(_isEdit ? "Edit Role" : "Create Role")</PageTitle>
+
+<div class="container-fluid">
+    <h1>@(_isEdit ? "Edit Role" : "Create Role")</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <EditForm Model="@_role" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <InputText id="name" class="form-control" @bind-Value="_role.Name" />
+                    <ValidationMessage For="@(() => _role.Name)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <InputTextArea id="description" class="form-control" @bind-Value="_role.Description" />
+                </div>
+
+                <h3>Permissions</h3>
+                <div class="mb-3">
+                    @foreach (var resource in _availableResources)
+                    {
+                        <div class="card mb-2">
+                            <div class="card-header">
+                                <h5 class="mb-0">@resource</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    @foreach (Permissions permission in Enum.GetValues(typeof(Permissions)))
+                                    {
+                                        if (permission != Permissions.None && permission != Permissions.All)
+                                        {
+                                            var isChecked = HasPermission(resource, permission);
+                                            <div class="col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" 
+                                                           id="@($"{resource}_{permission}")"
+                                                           checked="@isChecked"
+                                                           @onchange="@(e => TogglePermission(resource, permission, e.Value))" />
+                                                    <label class="form-check-label" for="@($"{resource}_{permission}")">
+                                                        @permission
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" @onclick="() => NavigationManager.NavigateTo("/roles")">Cancel</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    private bool _isEdit => Id.HasValue;
+    private CreateRoleDto _role = new();
+    private readonly string[] _availableResources = new[] { "Accounts", "Transactions", "Roles", "Users" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (_isEdit && Id.HasValue)
+        {
+            try
+            {
+                var existingRole = await RoleService.GetRoleAsync(Id.Value);
+                if (existingRole != null)
+                {
+                    _role = new CreateRoleDto
+                    {
+                        Name = existingRole.Name,
+                        Description = existingRole.Description,
+                        Permissions = existingRole.Permissions.Select(p => new CreateRolePermissionDto
+                        {
+                            Resource = p.Resource,
+                            PermissionValue = p.PermissionValue
+                        }).ToList()
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                NotificationService.ShowError($"Failed to load role: {ex.Message}");
+                NavigationManager.NavigateTo("/roles");
+            }
+        }
+    }
+
+    private bool HasPermission(string resource, Permissions permission)
+    {
+        return _role.Permissions.Any(p => 
+            p.Resource == resource && 
+            (p.PermissionValue & (int)permission) == (int)permission);
+    }
+
+    private void TogglePermission(string resource, Permissions permission, object? isChecked)
+    {
+        var permissionValue = (int)permission;
+        var existingPermission = _role.Permissions.FirstOrDefault(p => p.Resource == resource);
+
+        if (existingPermission == null)
+        {
+            if (isChecked is bool checkedValue && checkedValue)
+            {
+                _role.Permissions.Add(new CreateRolePermissionDto
+                {
+                    Resource = resource,
+                    PermissionValue = permissionValue
+                });
+            }
+        }
+        else
+        {
+            if (isChecked is bool checkedValue)
+            {
+                if (checkedValue)
+                {
+                    existingPermission.PermissionValue |= permissionValue;
+                }
+                else
+                {
+                    existingPermission.PermissionValue &= ~permissionValue;
+                }
+
+                if (existingPermission.PermissionValue == 0)
+                {
+                    _role.Permissions.Remove(existingPermission);
+                }
+            }
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (_isEdit && Id.HasValue)
+            {
+                var updateDto = new UpdateRoleDto
+                {
+                    Name = _role.Name,
+                    Description = _role.Description,
+                    Permissions = _role.Permissions.Select(p => new UpdateRolePermissionDto
+                    {
+                        Resource = p.Resource,
+                        PermissionValue = p.PermissionValue
+                    }).ToList()
+                };
+                await RoleService.UpdateRoleAsync(Id.Value, updateDto);
+                NotificationService.ShowSuccess($"Role '{_role.Name}' has been updated successfully.");
+            }
+            else
+            {
+                await RoleService.CreateRoleAsync(_role);
+                NotificationService.ShowSuccess($"Role '{_role.Name}' has been created successfully.");
+            }
+
+            NavigationManager.NavigateTo("/roles");
+        }
+        catch (Exception ex)
+        {
+            NotificationService.ShowError($"Failed to save role: {ex.Message}");
+        }
+    }
+} 

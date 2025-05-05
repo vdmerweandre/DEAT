@@ -1,59 +1,102 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">DEAT.AdminUI</a>
+        <a class="navbar-brand" href="">DEAT Admin</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="bi bi-house-door-fill" aria-hidden="true"></span> Home
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="transactions">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Journal
-            </NavLink>
-        </div>
+        <AuthorizeView>
+            <Authorized>
+                <AuthorizeView Policy="Permission.Accounts.View">
+                    <Authorized>
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="accounts">
+                                <span class="bi bi-bank" aria-hidden="true"></span> Accounts
+                            </NavLink>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
 
-        <div class="nav-item px-3 ms-3">
-            <NavLink class="nav-link" href="create-transaction">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Create Journal Entry
-            </NavLink>
-        </div>
+                <AuthorizeView Policy="Permission.Transactions.View">
+                    <Authorized>
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="transactions">
+                                <span class="bi bi-currency-exchange" aria-hidden="true"></span> Transactions
+                            </NavLink>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="accounts">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> COA
-            </NavLink>
-        </div>
+                <AuthorizeView Policy="Permission.StateChanges.View">
+                    <Authorized>
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="state-changes">
+                                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> State Changes
+                            </NavLink>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
 
-        <div class="nav-item px-3 ms-3">
-            <NavLink class="nav-link" href="create-account">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Create Accounts
-            </NavLink>
-        </div>
+                <AuthorizeView Policy="Permission.EventLogs.View">
+                    <Authorized>
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="event-logs">
+                                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Event Logs
+                            </NavLink>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="ledger-entries">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Ledger
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="state-changes">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> State Changes
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="event-logs">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Event Logs
-            </NavLink>
-        </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="login" @onclick="BeginSignOut">
+                        <span class="bi bi-box-arrow-right" aria-hidden="true"></span> Logout
+                    </NavLink>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="login">
+                        <span class="bi bi-box-arrow-in-right" aria-hidden="true"></span> Login
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
     </nav>
 </div>
+
+@code {
+    private bool collapseNavMenu = true;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    [Inject]
+    private NavigationManager Navigation { get; set; } = default!;
+
+    [Inject]
+    private IAccessTokenProvider TokenProvider { get; set; } = default!;
+
+    private async Task BeginSignOut()
+    {
+        var token = await TokenProvider.RequestAccessToken();
+        if (token.TryGetToken(out var accessToken))
+        {
+            Navigation.NavigateTo("login?action=logout", true);
+        }
+    }
+}
 
