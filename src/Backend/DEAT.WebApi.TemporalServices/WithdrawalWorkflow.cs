@@ -17,8 +17,9 @@ namespace DEAT.WebApi.TemporalServices
 
         private State _currentState = State.Created;
 
-        private ActivityOptions activityOptions = new ActivityOptions { 
-            StartToCloseTimeout = TimeSpan.FromSeconds(5), 
+        private ActivityOptions activityOptions = new ActivityOptions
+        {
+            StartToCloseTimeout = TimeSpan.FromSeconds(5),
             RetryPolicy = new Temporalio.Common.RetryPolicy
             {
                 InitialInterval = TimeSpan.FromSeconds(1),
@@ -58,7 +59,7 @@ namespace DEAT.WebApi.TemporalServices
                         case State.Approved:
                             Console.WriteLine("Processing tranaction...");
 
-                            await  ProcessTransactionAsync(transactionId);
+                            await ProcessTransactionAsync(transactionId);
                             break;
 
                         case State.Processed:
@@ -116,7 +117,7 @@ namespace DEAT.WebApi.TemporalServices
             {
                 _processedSignalReceived.TrySetResult($"Processed signal received - {transactionId}");
             }
-            await Task.FromResult( _currentState );
+            await Task.FromResult(_currentState);
         }
 
         [WorkflowSignal]
@@ -158,7 +159,7 @@ namespace DEAT.WebApi.TemporalServices
             }
             await Task.FromResult(_currentState);
         }
-        
+
         [WorkflowSignal]
         public async Task TransactionApproved(Guid transactionId)
         {

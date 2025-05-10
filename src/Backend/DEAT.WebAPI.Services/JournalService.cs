@@ -31,7 +31,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("f96fa900-a4c6-4bf5-91a9-92eb6564fd87"),
-                            AccountId = Guid.Parse("c4371215-948f-4d2f-8097-9312c53f9f21"),
+                            AccountId = 100,
                             Amount = 100,
                             Category = "Assets",
                             State = "Success",
@@ -40,7 +40,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("a13843a5-c882-416e-a004-16daa5e7b9d4"),
-                            AccountId = Guid.Parse("7ccdffbd-c698-40e8-ba8b-09010beb0e85"),
+                            AccountId = 200,
                             Amount = 100,
                             Category = "Liabilities",
                             State = "Success",
@@ -65,7 +65,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("8955427c-997b-4354-bcce-5f99e2136b54"),
-                            AccountId = Guid.Parse("c4371215-948f-4d2f-8097-9312c53f9f21"),
+                            AccountId = 100,
                             Amount = 100,
                             Category = "Assets",
                             State = "Success",
@@ -74,7 +74,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("ea388c24-6ff1-4144-b206-1ab134b052ae"),
-                            AccountId = Guid.Parse("7ccdffbd-c698-40e8-ba8b-09010beb0e85"),
+                            AccountId = 200,
                             Amount = 98,
                             Category = "Liabilities",
                             State = "Success",
@@ -83,7 +83,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("864c910f-f241-43dc-8e01-e7fce57d9b92"),
-                            AccountId = Guid.Parse("c2953603-2622-433e-a96c-39aba8fab744"),
+                            AccountId = 303,
                             Amount = 2,
                             Category = "Income",
                             State = "Success",
@@ -108,7 +108,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("57375d2d-9a0f-423f-944b-9a3b2336bbe9"),
-                            AccountId = Guid.Parse("c4371215-948f-4d2f-8097-9312c53f9f21"),
+                            AccountId = 100,
                             Amount = 99,
                             Category = "Assets",
                             State = "Success",
@@ -117,7 +117,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("27f4aa1b-4a2f-4e33-b407-e439b36a8dd8"),
-                            AccountId = Guid.Parse("7ccdffbd-c698-40e8-ba8b-09010beb0e85"),
+                            AccountId = 200,
                             Amount = 98,
                             Category = "Liabilities",
                             State = "Success",
@@ -126,7 +126,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("9be8a2a7-a891-45cb-8921-692ac4166080"),
-                            AccountId = Guid.Parse("c2953603-2622-433e-a96c-39aba8fab744"),
+                            AccountId = 303,
                             Amount = 2,
                             Category = "Income",
                             State = "Success",
@@ -135,7 +135,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("8e3275fb-9ece-4be9-b108-4635b4bb6097"),
-                            AccountId = Guid.Parse("e10278dc-c66a-4c97-868b-2de6bf0bede2"),
+                            AccountId = 307,
                             Amount = 1,
                             Category = "Expenses",
                             State = "Success",
@@ -160,7 +160,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("18113a2c-af38-4bc7-baf3-f48cd2f41bdc"),
-                            AccountId = Guid.Parse("e10278dc-c66a-4c97-868b-2de6bf0bede2"),
+                            AccountId = 307,
                             Amount = 1,
                             Category = "Expenses",
                             State = "Success",
@@ -169,7 +169,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("32b499c4-6750-4b00-906d-39e1d4e8b1ff"),
-                            AccountId = Guid.Parse("c2953603-2622-433e-a96c-39aba8fab744"),
+                            AccountId = 303,
                             Amount = 1,
                             Category = "Income",
                             State = "Success",
@@ -194,7 +194,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("6e80c523-d916-4d62-a340-15677c88d5ff"),
-                            AccountId = Guid.Parse("31beb218-f9be-44e0-bbd3-29448fe60d9a"),
+                            AccountId = 101,
                             Amount = 100,
                             Category = "Assets",
                             State = "Success",
@@ -203,7 +203,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("17f6f74f-3875-4a63-8e5f-b8e5fb9bc84a"),
-                            AccountId = Guid.Parse("7ccdffbd-c698-40e8-ba8b-09010beb0e85"),
+                            AccountId = 200,
                             Amount = 100,
                             Category = "Liabilities",
                             State = "Success",
@@ -212,7 +212,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("d5b16445-fe96-48f5-a75d-d42a41435b89"),
-                            AccountId = Guid.Parse("39941382-149e-4964-b725-ad66aa4325ad"),
+                            AccountId = 302,
                             Amount = 10,
                             Category = "Income",
                             State = "Success",
@@ -221,7 +221,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("485f2da6-8213-4e30-b2cf-e993749f4405"),
-                            AccountId = Guid.Parse("c4178afd-e32c-4fd9-8c4d-25e78c522a5c"),
+                            AccountId = 306,
                             Amount = 5,
                             Category = "Expenses",
                             State = "Success",
@@ -230,7 +230,7 @@ namespace DEAT.WebAPI.Services
                         new JournalDetail
                         {
                             TransactionLegId = Guid.Parse("c5f81ee7-2665-4bd0-9cac-08b8514eec32"),
-                            AccountId = Guid.Parse("39941382-149e-4964-b725-ad66aa4325ad"),
+                            AccountId = 302,
                             Amount = 5,
                             Category = "Income",
                             State = "Success",
@@ -259,7 +259,7 @@ namespace DEAT.WebAPI.Services
 
         public async Task<Guid> CreateJournalEntryAsync(Guid transactionId, JournalEntry transaction)
         {
-            if (_transactions.ContainsKey(transaction.TransactionId)) 
+            if (_transactions.ContainsKey(transaction.TransactionId))
             {
                 _logger.LogWarning($"Transaction already creates {transaction.TransactionId}");
                 return await Task.FromResult(transaction.TransactionId);
@@ -367,7 +367,7 @@ namespace DEAT.WebAPI.Services
             {
                 _transactions[transactionId].State = "Confirmed";
             }
-            
+
             return await Task.FromResult(confirmed);
         }
     }

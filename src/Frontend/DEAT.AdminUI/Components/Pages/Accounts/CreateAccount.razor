@@ -1,20 +1,70 @@
 ﻿@page "/create-account"
 @rendermode InteractiveServer
+@using BlazorBootstrap
 
 @inject DEAT.AdminUI.Services.Contracts.IAccountService AccountService
+@inject ToastService ToastService
 
 <PageTitle>Create Account</PageTitle>
 
 <h1>Create Account</h1>
 
+<Toasts class="position-fixed top-0 end-0 p-3" Messages="@messages" AutoHide="true" Delay="4000" />
+
 @code {
-    private Account NewAccount = new();
+    private List<ToastMessage> messages = new();
+    private Account NewAccount = new()
+    {
+        AccountId = null,
+        Category = "Assets",
+        AccountName = string.Empty,
+        Debit = 0,
+        Credit = 0
+    };
 
     private async Task SubmitAccount()
     {
-        var accountId = await AccountService.CreateAccountAsync(NewAccount);
-
-        NewAccount = new();
+        try
+        {
+            var accountId = await AccountService.CreateAccountAsync(NewAccount);
+            
+            messages.Add(new ToastMessage 
+            { 
+                Type = ToastType.Success,
+                Title = "Success",
+                Message = "Account created successfully!"
+            });
+            StateHasChanged();
+            
+            NewAccount = new()
+            {
+                AccountId = null,
+                Category = "Assets",
+                AccountName = string.Empty,
+                Debit = 0,
+                Credit = 0
+            };
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Conflict)
+        {
+            messages.Add(new ToastMessage 
+            { 
+                Type = ToastType.Danger,
+                Title = "Error",
+                Message = ex.Message
+            });
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            messages.Add(new ToastMessage 
+            { 
+                Type = ToastType.Danger,
+                Title = "Error",
+                Message = $"Error creating account: {ex.Message}"
+            });
+            StateHasChanged();
+        }
     }
 }
 
@@ -23,6 +73,16 @@
     <div class="mb-3">
         <label class="form-label">Account Name</label>
         <input type="text" class="form-control" @bind="NewAccount.AccountName" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select class="form-select" @bind="NewAccount.Category">
+            <option value="Assets">Assets</option>
+            <option value="Liabilities">Liabilities</option>
+            <option value="Equity">Equity</option>
+            <option value="Income">Income</option>
+            <option value="Expenses">Expenses</option>
+        </select>
     </div>
     <div class="mb-3">
         <label class="form-label">Starting Balance</label>

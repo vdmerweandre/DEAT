@@ -1,13 +1,12 @@
-﻿
-namespace DEAT.Data.Models.Dtos
+﻿namespace DEAT.Data.Models.Dtos
 {
     public class LedgerEntry
     {
         public Guid TransactionId { get; set; }
         public Guid TransactionLegId { get; set; }
-        public Guid AccountId { get; set; }
-        public decimal Amount { get; set; }
-        public string Side { get; set; }
+        public System.UInt128? AccountId { get; set; }
+        public System.UInt128? Amount { get; set; }
+        public string Side { get; set; } = string.Empty;
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 }

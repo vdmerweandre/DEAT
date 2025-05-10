@@ -7,54 +7,52 @@ using static MassTransit.MessageHeaders;
 
 namespace DEAT.WebAPI.Services
 {
-    public class AccountService: IAccountService
+    public class AccountService : IAccountService
     {
         private readonly ILogger<AccountService> _logger;
-        private readonly Dictionary<Guid, Account> _accounts = new();
+        private readonly Dictionary<System.UInt128, Account> _accounts = new();
 
         public AccountService(ILogger<AccountService> logger)
-        { 
+        {
             _logger = logger;
-
-            //Assets (A) + Expenses (E) = Liabilities (L) + Equity/Capital (C) + Income (I).
-            //Assets: Items that a business owns that add value to the company
-            //Liabilities: What a business owes to other parties
-            //Income: Money that a business earns
-            //Expenses: Costs that a business incurs to generate revenue
 
             //seed accounts
             //Assets
-            Guid id = Guid.Parse("c4371215-948f-4d2f-8097-9312c53f9f21");
+            System.UInt128 id = 100;
             _accounts.Add(id, new Account { AccountId = id, Category = "Assets", AccountName = "Bank", Debit = 1000, Credit = 0 });
 
             //Asssets - wallets
-            id = Guid.Parse("31beb218-f9be-44e0-bbd3-29448fe60d9a");
+            id = 101;
             _accounts.Add(id, new Account { AccountId = id, Category = "Assets", AccountName = "Hot wallet - BTC", Debit = 2000, Credit = 200 });
-            id = Guid.Parse("1db0182b-5a4e-42dc-b4c5-ddeb6e5ed2c4");
+            id = 102;
             _accounts.Add(id, new Account { AccountId = id, Category = "Assets", AccountName = "Hot wallet - SOL", Debit = 1000, Credit = 100 });
 
             //Liabilities
-            id = Guid.Parse("7ccdffbd-c698-40e8-ba8b-09010beb0e85");
+            id = 200;
             _accounts.Add(id, new Account { AccountId = id, Category = "Liabilities", AccountName = "Accounts Payable", Debit = 2000, Credit = 0 });
+            id = 201;
+            _accounts.Add(id, new Account { AccountId = id, Category = "Liabilities", AccountName = "Liquidity Provider", Debit = 2000, Credit = 0 });
 
             //Income
-            id = Guid.Parse("e5b56834-f9dc-4d88-b909-35bb94394cc5");
+            id = 301;
             _accounts.Add(id, new Account { AccountId = id, Category = "Income", AccountName = "Accounts Recievable", Debit = 0, Credit = 0 });
-            id = Guid.Parse("39941382-149e-4964-b725-ad66aa4325ad");
+            id = 302;
             _accounts.Add(id, new Account { AccountId = id, Category = "Income", AccountName = "Withdrawal Fees", Debit = 300, Credit = 0 });
-            id = Guid.Parse("c2953603-2622-433e-a96c-39aba8fab744");
+            id = 303;
             _accounts.Add(id, new Account { AccountId = id, Category = "Income", AccountName = "Deposit Fees", Debit = 200, Credit = 0 });
-            id = Guid.Parse("0c7ffe5d-9eba-40c2-b649-3f0a7b6cdbac");
+            id = 304;
+            _accounts.Add(id, new Account { AccountId = id, Category = "Income", AccountName = "Brokerage Fees", Debit = 0, Credit = 0 });
+            id = 305;
             _accounts.Add(id, new Account { AccountId = id, Category = "Income", AccountName = "Commission", Debit = 1000, Credit = 0 });
 
             //Expenses
-            id = Guid.Parse("c4178afd-e32c-4fd9-8c4d-25e78c522a5c");
+            id = 306;
             _accounts.Add(id, new Account { AccountId = id, Category = "Expenses", AccountName = "Network Fees", Debit = 200, Credit = 0 });
-            id = Guid.Parse("e10278dc-c66a-4c97-868b-2de6bf0bede2");
+            id = 307;
             _accounts.Add(id, new Account { AccountId = id, Category = "Expenses", AccountName = "Merchant Fees", Debit = 100, Credit = 0 });
 
             //Equity
-            id = Guid.Parse("b772c40b-c306-421c-a2e7-41187259f905");
+            id = 400;
             _accounts.Add(id, new Account { AccountId = id, Category = "Equity", AccountName = "Capital", Debit = 70001, Credit = 0 });
         }
 
@@ -63,37 +61,47 @@ namespace DEAT.WebAPI.Services
             return Task.FromResult(_accounts.Values.ToList());
         }
 
-        public async Task<Guid> CreateAccountAsync(Account account)
+        public async Task<System.UInt128?> CreateAccountAsync(Account account)
         {
-            if (_accounts.ContainsKey(account.AccountId))
+            if (account.AccountId.HasValue && _accounts.ContainsKey(account.AccountId.Value))
             {
                 _logger.LogWarning($"Account already exists {account.AccountId}");
-                return await Task.FromResult(account.AccountId);
+                return account.AccountId;
             }
 
             // Generate a new Account ID
-            account.AccountId = Guid.NewGuid();
+            var newId = _accounts.Keys.Max() + 1;
+            account.AccountId = newId;
+            account.Debit = account.Debit ?? 0;
+            account.Credit = account.Credit ?? 0;
 
-            _accounts.Add(account.AccountId, account);
+            _accounts.Add(newId, account);
 
-            return await Task.FromResult(account.AccountId);
+            return newId;
         }
 
-        public Task<bool> DebitAccountAsync(Guid accountId, decimal amount)
+        public Task<bool> DebitAccountAsync(System.UInt128? accountId, System.UInt128? amount)
         {
-            if (!_accounts.ContainsKey(accountId) || _accounts[accountId].Balance < amount)
+            if (!accountId.HasValue || !amount.HasValue || !_accounts.ContainsKey(accountId.Value))
                 return Task.FromResult(false);
 
-            _accounts[accountId].Debit += amount;
+            var account = _accounts[accountId.Value];
+            var currentBalance = account.Balance ?? 0;
+
+            if (currentBalance < amount.Value)
+                return Task.FromResult(false);
+
+            account.Debit = (account.Debit ?? 0) + amount.Value;
             return Task.FromResult(true);
         }
 
-        public Task<bool> CreditAccountAsync(Guid accountId, decimal amount)
+        public Task<bool> CreditAccountAsync(System.UInt128? accountId, System.UInt128? amount)
         {
-            if (!_accounts.ContainsKey(accountId))
+            if (!accountId.HasValue || !amount.HasValue || !_accounts.ContainsKey(accountId.Value))
                 return Task.FromResult(false);
 
-            _accounts[accountId].Credit += amount;
+            var account = _accounts[accountId.Value];
+            account.Credit = (account.Credit ?? 0) + amount.Value;
             return Task.FromResult(true);
         }
     }

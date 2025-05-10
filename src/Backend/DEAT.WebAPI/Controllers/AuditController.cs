@@ -8,22 +8,27 @@ namespace DEAT.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuditController(
-        StateChangeLogService stateObserver,
-        ILogger<AuditController> logger) : ControllerBase
+    public class AuditController : ControllerBase
     {
+        private readonly StateChangeLogService _stateObserver;
+
+        public AuditController(StateChangeLogService stateObserver)
+        {
+            _stateObserver = stateObserver;
+        }
+
         [HttpGet("states", Name = "GetStateChangeLogs")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IReadOnlyList<StateChangeLog> GetStateChangeLogs()
         {
-            return stateObserver.GetStateChanges();
+            return _stateObserver.GetStateChanges();
         }
 
         [HttpGet("events", Name = "GetEventLogs")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IEnumerable<EventLog> GetEventLogs()
         {
-            return stateObserver.GetEventLogs();
+            return _stateObserver.GetEventLogs();
         }
     }
 }

@@ -30,5 +30,4 @@ namespace DEAT.WebAPI.Services.Consumers
             }
         }
     }
-
 }

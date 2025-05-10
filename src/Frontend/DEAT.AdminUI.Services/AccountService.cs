@@ -14,6 +14,34 @@ namespace DEAT.AdminUI.Services
 
         public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
+            return new List<Account>()
+            {
+                new Account()
+                {
+                    AccountId = 1001,
+                    AccountName = "BTC - Hot wallet",
+                    Category = "Asset",
+                    Credit = 8000,
+                    Debit = 10000
+                },
+                new Account()
+                {
+                    AccountId = 1001,
+                    AccountName = "BTC - Warm wallet",
+                    Category = "Asset",
+                    Credit = 1000,
+                    Debit = 2000000
+                },
+                new Account()
+                {
+                    AccountId = 1001,
+                    AccountName = "BTC - Network Fee",
+                    Category = "Expenses",
+                    Credit = 0,
+                    Debit = 2
+                }
+            };
+            
             // Create the client
             using HttpClient client = httpClientFactory.CreateClient("WebApi");
 
@@ -35,30 +63,43 @@ namespace DEAT.AdminUI.Services
             return Enumerable.Empty<Account>();
         }
 
-        public async Task<Guid> CreateAccountAsync(Account account)
+        public async Task<System.UInt128> CreateAccountAsync(Account account)
         {
             // Create the client
             using HttpClient client = httpClientFactory.CreateClient("WebApi");
 
             try
             {
-                // Make HTTP GET request
-                // Parse JSON response deserialize into AccountDto types
+                // Make HTTP POST request
                 var response = await client.PostAsJsonAsync<Account>(
                     _baseUri,
                     account,
                     new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
+                if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+                {
+                    throw new HttpRequestException("An account with this name already exists", null, System.Net.HttpStatusCode.Conflict);
+                }
+
                 response.EnsureSuccessStatusCode();
 
-                return await response.Content.ReadFromJsonAsync<Guid>();
+                var createdAccount = await response.Content.ReadFromJsonAsync<Account>();
+                if (createdAccount?.AccountId == null)
+                {
+                    throw new Exception("Failed to create account: No account ID returned from server");
+                }
+                return createdAccount.AccountId.Value;
+            }
+            catch (HttpRequestException ex)
+            {
+                logger.LogError("Error creating an Account: {Error}", ex);
+                throw; // Re-throw the original exception to preserve the status code
             }
             catch (Exception ex)
             {
-                logger.LogError("Error creating and Account: {Error}", ex);
+                logger.LogError("Error creating an Account: {Error}", ex);
+                throw new HttpRequestException($"Failed to create account: {ex.Message}", ex, System.Net.HttpStatusCode.Conflict);
             }
-
-            return Guid.Empty;
         }
     }
 }

@@ -5,6 +5,6 @@ namespace DEAT.AdminUI.Services.Contracts
     public interface IAccountService
     {
         Task<IEnumerable<Account>> GetAllAccountsAsync();
-        Task<Guid> CreateAccountAsync(Account account);
+        Task<System.UInt128> CreateAccountAsync(Account account);
     }
 }

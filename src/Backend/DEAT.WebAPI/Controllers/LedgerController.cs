@@ -7,15 +7,20 @@ namespace DEAT.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LedgerController(
-        ILedgerService ledgerService,
-        ILogger<LedgerController> logger) : ControllerBase
+    public class LedgerController : ControllerBase
     {
+        private readonly ILedgerService _ledgerService;
+
+        public LedgerController(ILedgerService ledgerService)
+        {
+            _ledgerService = ledgerService;
+        }
+
         [HttpGet(Name = "GetLegerEntries")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IEnumerable<LedgerEntry>> GetLegerEntries()
         {
-            return await ledgerService.GetLedgerAsync();
+            return await _ledgerService.GetLedgerAsync();
         }
     }
 }

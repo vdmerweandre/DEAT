@@ -2,18 +2,20 @@
 {
     public class Account
     {
-        public Guid AccountId { get; set; }
-        public string Category { get; set; }
-        public string AccountName { get; set; }
-        public decimal Balance
+        public System.UInt128? AccountId { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public string AccountName { get; set; } = string.Empty;
+        public System.UInt128? Balance
         {
             get
             {
-                return Debit - Credit;
-}
+                if (!Debit.HasValue || !Credit.HasValue)
+                    return null;
+                return Debit.Value - Credit.Value;
+            }
         }
 
-        public decimal Debit { get; set; }
-        public decimal Credit { get; set; }
+        public System.UInt128? Debit { get; set; }
+        public System.UInt128? Credit { get; set; }
     }
 }

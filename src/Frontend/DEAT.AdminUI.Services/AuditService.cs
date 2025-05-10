@@ -49,7 +49,7 @@ namespace DEAT.AdminUI.Services
                     _baseUri + "/states",
                     new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-                return log.OrderByDescending(l => l.Timestamp) ?? Enumerable.Empty<StateChangeLog>(); 
+                return log.OrderByDescending(l => l.Timestamp) ?? Enumerable.Empty<StateChangeLog>();
             }
             catch (Exception ex)
             {
